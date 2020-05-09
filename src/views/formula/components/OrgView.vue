@@ -95,10 +95,6 @@ export default {
             class="context-menu"
             on-command={this.handleContextMenuClick.bind(this, data)}
             nativeOn-click={this.handleDropdownClick}
-            style={{
-              transform: `scale(${1 / this.zoomHandled}, ${1 /
-              this.zoomHandled})`
-            }}
           >
             <span class={['custom-org-node', data.children && data.children.length ? 'has-children-label' : '']}>
               {data.label}

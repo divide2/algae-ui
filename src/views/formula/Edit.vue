@@ -1,9 +1,6 @@
 <template>
   <el-card style="height: 100%;width: 100%;overflow:hidden">
     <div class="department-outer">
-      <div class="zoom-box">
-        <zoom-controller v-model="zoom" :min="20" :max="200"></zoom-controller>
-      </div>
       <div class="view-box">
         <org-view
           v-if="data"
@@ -18,7 +15,6 @@
 
 <script>
 import OrgView from './components/OrgView.vue'
-import ZoomController from './components/ZoomController.vue'
 import './index.less'
 
 const menuDic = {
@@ -30,8 +26,7 @@ const menuDic = {
 export default {
   name: 'MapleTree',
   components: {
-    OrgView,
-    ZoomController
+    OrgView
   },
   data() {
     return {
