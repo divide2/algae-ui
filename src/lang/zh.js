@@ -2,51 +2,9 @@ export default {
   route: {
     dashboard: '主页',
     profile: '个人中心',
-    instance: '测试列表',
-    snapshot: '测试管理',
-    cases: '用例管理',
-    snapshotCaseCreate: '创建用例集',
-    snapshotCaseEdit: '编辑用例集',
-    snapshotCaseDetail: '用例集详情',
-    snapshotCompareList: '快照比对',
-    snapshotCompareDetail: '快照详情',
-    snapshotInstanceExecCaseDetail: '测试执行详情',
-    snapshotInstanceExecCmdDetail: '测试执行用例详情',
-    snapshotInstanceDetail: '测试详情',
-    snapshotInstanceReport: '报告',
-    snapshotInstanceCreate: '创建测试',
-    snapshotInstanceEdit: '编辑测试',
-    basic: '基础信息管理',
-    laboratory: '实验室信息维护',
-    laboratoryCreate: '创建实验室',
-    laboratoryEdit: '编辑实验室',
-    acquisition: '采集卡维护',
-    acquisitionCreate: '创建采集卡',
-    acquisitionEdit: '编辑采集卡',
-    cmd: '指令管理',
-    cmdCreate: '创建指令',
-    cmdUpdate: '编辑指令',
-    vehicle: '车辆&固件信息维护',
-    vehicleCreate: '创建车辆维护',
-    vehicleDetail: '查看车辆维护历史',
-    device: '设备信息维护',
-    deviceGroup: '设备组信息维护',
-    deviceGroupEdit: '编辑设备组信息',
-    deviceGroupCreate: '创建设备组信息',
-    snapshotTestReport: '测试报告',
-    snapshotTestReportDetail: '测试报告详情',
-    version: '版本信息维护',
-    versionCreate: '创建版本信息',
-    versionEdit: '编辑版本信息',
-    indexManage: '监控指标管理',
-    indexMonitorCreate: '新建监控指标',
-    indexMonitorDetail: '查看监控指标',
-    indexMonitorEdit: '编辑监控指标',
-    monitorManage: '日常监控列表',
-    monitorCreate: '新建日常监控',
-    monitorEdit: '编辑日常监控',
-    monitorDetail: '查看日常监控',
-    monitorResponseDetail: '查看失败详情'
+    product: '产品',
+    formulaGroup: '公式组',
+    formula: '公式'
   },
   navbar: {
     dashboard: '首页',
@@ -55,6 +13,24 @@ export default {
     profile: '个人中心',
     theme: '换肤',
     size: '布局大小'
+  },
+  product: {
+    productCode: '产品编号'
+  },
+  formulaGroup: {
+    formulaGroupName: '组名',
+    formulaGroupDisplayName: 'Json中显示名称',
+    formulaGroupCategory: '种类',
+    formulaGroupCalcType: '计算类型',
+    formulaGroupDesc: '描述',
+    iterationTerminalMaster: '结束迭代Master'
+  },
+  formula: {
+    formulaName: '公式名',
+    masterName: '公式Master名',
+    formula: '公式内容',
+    masterDesc: '公式描述',
+    reference: '关联公式'
   },
   dashboard: {
     visitCount: '总访问次数',
@@ -122,223 +98,15 @@ export default {
     copy: '复制',
     upgrade: '升级',
     update: '更新',
-    retry: '重试'
-  },
-  basic: {
-    laboratory: {
-      name: '名称',
-      ip: '实验室IP',
-      location: '位置',
-      description: '描述',
-      createTime: '创建时间',
-      deviceName: '设备名称',
-      deviceType: '类型',
-      deviceAddress: 'IP地址',
-      deviceDescription: '设备描述'
-    },
-    acquisition: {
-      name: '名称',
-      description: '描述',
-      createTime: '创建时间',
-      channel: '通道名',
-      value: '通道值',
-      minValue: '最小阈值',
-      maxValue: '最大阈值'
-    },
-    cmd: {
-      name: '名称',
-      type: '类型',
-      cmd: 'cmd',
-      description: '描述',
-      createTime: '创建时间',
-      expectName: '期望结果名称',
-      waitTime: '等待时间',
-      header: '报文头',
-      pattern: '匹配规则',
-      regularExpression: '判断条件'
-    },
-    vehicle: {
-      imei: 'imei',
-      vehicleType: '车型',
-      address: '地址',
-      at: 'AT指令',
-      response: '报文响应',
-      version: '大包版本',
-      ccuVersion: 'CCU版本',
-      ecuVersion: 'ECU版本',
-      apVersion: 'AP版本',
-      bleVersion: 'BLE版本',
-      bmsVersion: 'BMS版本',
-      description: '描述',
-      createTime: '创建时间'
-    },
-    device: {
-      serial: '设备编号',
-      type: '类型',
-      address: 'IP地址(或Imei)',
-      createTime: '创建时间'
-    },
-    deviceGroup: {
-      name: '设备组名称',
-      status: '状态',
-      content: '包含设备类型',
-      deviceCount: '设备数量',
-      location: '位置',
-      createTime: '创建时间'
-    },
-    version: {
-      MasterInfo: 'Master Info',
-      BranchInfo: 'Branch Info',
-      appVersion: 'APP主干版本',
-      vehicleType: '车型',
-      apVersion: 'AP版本',
-      bleVersion: 'BLE版本',
-      libVersion: 'LIB版本',
-      ecuVersion: 'ECU版本',
-      ecuFactory: 'ECU厂家',
-      bmsVersion: 'BMS版本',
-      createTime: '创建时间',
-      branchAppVersion: 'APP分支版本'
-    }
-  },
-  snapshot: {
-    case: {
-      vehicleTypes: '车型',
-      duration: '时长',
-      status: '状态',
-      count: '指令数量',
-      name: '用例名称',
-      description: '描述',
-      executionTime: '执行时间',
-      cmdBase: '动作',
-      cmdType: '类型',
-      cmdAutoStop: '自动停止',
-      acquisitionId: '采集卡接线',
-      createTime: '创建时间',
-      debugMode: '开发模式'
-    },
-    instance: {
-      instanceId: '测试名称',
-      fwVersion: '固件版本',
-      caseName: '用例名称',
-      caseResult: '用例结果',
-      status: '最新执行状态',
-      createTime: '创建时间',
-      description: '描述',
-      instanceCreate: '新建测试',
-      count: '执行次数',
-      instanceExecName: '测试执行名称',
-      absoluteTime: '执行绝对时间',
-      relativeTime: '执行相对时间',
-      cmdExecutionTime: '指令设置时间',
-      cmdName: '指令名称',
-      message: '返回',
-      appVersion: 'APP版本',
-      appVersionType: 'APP版本类型',
-      testLink: '提测单link',
-      testUser: '测试人员',
-      wholeVersion: '大包版本',
-      apVersion: 'AP版本',
-      libVersion: 'Lib版本',
-      bleVersion: 'BLE版本',
-      ecuVersion: 'ECU版本',
-      executionTime: '执行间隔',
-      caseCount: '用例数量',
-      startTime: '开始时间',
-      endTime: '结束时间',
-      result: '执行结果',
-      duration: '执行时长/h',
-      durationMin: '执行时长/min',
-      passRate: '用例通过率',
-      passScore: '用例通过数/用例总数',
-      analysis: '结果分析'
-    },
-    testReport: {
-      appVersion: 'APP版本',
-      appVersionType: 'APP版本类型',
-      startTime: '开始时间',
-      endTime: '结束时间',
-      duration: '测试天数',
-      testUser: '测试用户',
-      testLink: '提测单link',
-      deviceCount: '设备数量',
-      testCount: '测试次数',
-      result: '测试结果',
-      wholeVersion: '大包版本',
-      apVersion: 'AP版本',
-      libVersion: 'Lib版本',
-      bleVersion: 'BLE版本',
-      ecuVersion: 'ECU版本',
-      ecuFactory: 'ECU厂家'
-    },
-    compare: {
-      name: '比对名称',
-      fwVersion: '固件版本',
-      caseName: '用例集名称',
-      status: '状态',
-      createTime: '创建时间',
-      description: '描述',
-      referInstanceExec: '基准测试结果',
-      referInstance: '基准测试',
-      instanceExec: '比对测试结果',
-      instance: '比对测试',
-      caseStartTime: '开始时间',
-      caseEndTime: '结束时间',
-      acquisitionName: '采集卡接线方式'
-    }
+    retry: '重试',
+    formulaGroup: '公式组',
+    formula: '公式'
   },
   status: {
     basic: {
       deviceGroup: {
         unused: '未占用',
         used: '已占用'
-      }
-    },
-    snapshot: {
-      cases: {
-        unused: '未使用',
-        used: '已使用'
-      },
-      instance: {
-        unexec: '未执行',
-        execing: '执行中',
-        execed: '执行完毕',
-        stopping: '停止中',
-        stopped: '已停止',
-        success: '成功',
-        failed: '失败'
-      },
-      instanceExec: {
-        unexec: '未执行',
-        execing: '执行中',
-        execed: '执行完毕',
-        uploading: '上传中',
-        uploaded: '已上传',
-        analyzing: '分析中',
-        analyzed: '分析完毕',
-        stopping: '停止中',
-        stopped: '已停止',
-        success: '成功',
-        failed: '失败'
-      },
-      instanceExecLine: {
-        unexec: '未执行',
-        analyzing: '分析中',
-        success: '成功',
-        failed: '执行失败',
-        result_failed: '结果失败',
-        stopped: '已停止'
-      },
-      instanceExecCase: {
-        unexec: '未执行',
-        execing: '执行中',
-        success: '成功',
-        failed: '失败',
-        stopped: '已停止'
-      },
-      compare: {
-        comparing: '对比中',
-        compared: '对比完成'
       }
     }
   },

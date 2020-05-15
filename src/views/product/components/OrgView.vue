@@ -13,7 +13,7 @@
         collapsable
         horizontal
         @on-node-click="handleNodeClick"
-      ></v-org-tree>
+      />
     </div>
   </div>
 </template>
@@ -22,21 +22,27 @@
 import { off, on } from '@/libs/tools'
 
 const menuList = [
+  /*
   {
-    key: 'edit',
-    label: '编辑部门'
+    key: 'addChild',
+    label: '添加公式',
+    valid: (data) => data.id === '0'
+  },
+  */
+  {
+    key: 'relevance',
+    label: '关联公式',
+    valid: (data) => data.id === '0'
   },
   {
-    key: 'detail',
-    label: '查看部门'
-  },
-  {
-    key: 'new',
-    label: '新增子部门'
+    key: 'toggle',
+    label: '切换显示',
+    valid: (data) => data.id !== '0'
   },
   {
     key: 'delete',
-    label: '删除部门'
+    label: '删除',
+    valid: (data) => data.id !== '0'
   }
 ]
 export default {
@@ -46,7 +52,14 @@ export default {
       type: Number,
       default: 1
     },
-    data: Object
+    data: {
+      type: Object,
+      required: true
+    },
+    validatedItems: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
@@ -71,18 +84,21 @@ export default {
       }
     }
   },
+  mounted() {
+    on(document, 'contextmenu', this.handleDocumentContextmenu)
+  },
+  beforeDestroy() {
+    off(document, 'contextmenu', this.handleDocumentContextmenu)
+  },
   methods: {
     handleNodeClick(e, data, expand) {
+      console.log(data)
     },
     closeMenu() {
       this.currentContextMenuId = ''
     },
     getBgColor(data) {
-      return this.currentContextMenuId === data.id
-        ? data.isRoot
-          ? '#0d7fe8'
-          : '#5d6c7b'
-        : ''
+      return this.validatedItems.includes(data.id) ? '#10655b' : '#999'
     },
     nodeRender(h, data) {
       return (
@@ -96,11 +112,11 @@ export default {
             on-command={this.handleContextMenuClick.bind(this, data)}
             nativeOn-click={this.handleDropdownClick}
           >
-            <span class={['custom-org-node', data.children && data.children.length ? 'has-children-label' : '']}>
+            <span style={{ backgroundColor: this.getBgColor(data) }} class={['custom-org-node', data.children && data.children.length ? 'has-children-label' : '']}>
               {data.label}
             </span>
             <el-dropdown-menu slot="dropdown">
-              {menuList.map(item => {
+              {menuList.filter(item => item.valid(data)).map(item => {
                 return (
                   <el-dropdown-item command={item.key}>{item.label}</el-dropdown-item>
                 )
@@ -111,15 +127,12 @@ export default {
       )
     },
     contextmenu(data, $event) {
-      let event = $event || window.event
+      console.log(data)
+      const event = $event || window.event
       event.preventDefault
         ? event.preventDefault()
         : (event.returnValue = false)
       this.currentContextMenuId = data.id
-    },
-    setDepartmentData(data) {
-      data.isRoot = true
-      this.departmentData = data
     },
     mousedownView(event) {
       this.canMove = true
@@ -150,12 +163,6 @@ export default {
     handleContextMenuClick(data, key) {
       this.$emit('on-menu-click', { data, key })
     }
-  },
-  mounted() {
-    on(document, 'contextmenu', this.handleDocumentContextmenu)
-  },
-  beforeDestroy() {
-    off(document, 'contextmenu', this.handleDocumentContextmenu)
   }
 }
 </script>

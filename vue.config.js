@@ -47,7 +47,7 @@ module.exports = {
         }
       },
       [process.env.VUE_APP_SERVER_API]: {
-        target: `http://127.0.0.1:9090/media`,
+        target: `http://127.0.0.1:30013`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_SERVER_API]: ''

@@ -113,24 +113,31 @@ export const asyncRoutes = [
     meta: { title: 'basic', icon: 'table', roles: ['admin'] },
     children: [
       {
-        path: '/basic/laboratory/list',
-        name: 'laboratory',
-        // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-        component: () => import('@/views/basic/laboratory/List'),
-        meta: { title: 'laboratory' }
-      },
-      {
-        path: '/formula',
-        name: '公式',
-        component: () => import('@/views/formula/Edit'),
+        path: 'product/:productId/group/:groupId/formula',
+        name: 'formula',
+        hidden: true,
+        component: () => import('@/views/product/Formula'),
         meta: { title: 'formula' }
       },
       {
-        path: '/basic/version/edit/:id',
-        name: 'versionEdit',
+        path: 'product/:productId/group/:groupId/formula-view',
+        name: 'formula-view',
         hidden: true,
-        component: () => import('@/views/basic/version/EditForm'),
-        meta: { title: 'versionEdit' }
+        component: () => import('@/views/product/FormulaView'),
+        meta: { title: 'formula-view' }
+      },
+      {
+        path: '/product',
+        name: 'product',
+        component: () => import('@/views/product/List'),
+        meta: { title: 'product' }
+      },
+      {
+        path: '/product/:id/formula/group',
+        name: 'formulaGroup',
+        hidden: true,
+        component: () => import('@/views/product/FormulaGroup'),
+        meta: { title: 'formulaGroup' }
       }
     ]
   },
