@@ -120,7 +120,8 @@ export const asyncRoutes = [
         meta: { title: 'formula' }
       },
       {
-        path: 'product/:productId/group/:groupId/formula-view',
+        // path: 'product/:productId/group/:groupId/formula-view',
+        path: 'formula-view',
         name: 'formula-view',
         hidden: true,
         component: () => import('@/views/product/FormulaView'),

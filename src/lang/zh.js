@@ -76,6 +76,7 @@ export default {
   },
   button: {
     remove: '删除',
+    relevance: '关联',
     create: '新增',
     edit: '编辑',
     search: '查询',

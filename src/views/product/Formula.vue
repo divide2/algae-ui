@@ -73,7 +73,6 @@ import './index.less'
 import FormulaApi from '@/api/FormulaApi'
 import FormulaGroupApi from '@/api/FormulaGroupApi'
 
-
 export default {
   name: 'Formula',
   components: {
