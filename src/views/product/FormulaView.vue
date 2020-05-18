@@ -7,44 +7,33 @@
     <el-card>
       <div id="container" />
     </el-card>
-    <el-dialog :visible.sync="dialogVisible">
-      <el-row>
-        <el-col :span="10">
-          <el-form>
-            <el-form-item :label="$t('formula.masterName')">
-              <el-select v-model="formula.masterId" filterable>
-                <el-option v-for="item in masters" :key="item.id" :value="item.id" :label="item.formulaName" />
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
-        <el-button type="primary" @click="confirmRelevance">{{ $t('button.confirm') }}</el-button>
-      </div>
-    </el-dialog>
     <ul
       v-if="optionSettings.show"
       class="el-dropdown-menu"
       :style="`position:absolute;left:${optionSettings.x}px;top: ${optionSettings.y}px`"
     >
       <li class="el-dropdown-menu__item" @click="relevance">{{ $t('button.relevance') }}</li>
+      <li class="el-dropdown-menu__item" @click="toggle">{{ $t('button.toggle') }}</li>
       <li class="el-dropdown-menu__item" @click="remove">{{ $t('button.remove') }}</li>
     </ul>
-
+    <relevance-dialog ref="relevanceDialog" />
   </el-card>
 </template>
 <script>
 import FormulaApi from '@/api/FormulaApi'
 import FormulaGroupApi from '@/api/FormulaGroupApi'
-import G6, { Minimap } from '@antv/g6'
+import { G6 } from './components/G6Config'
+import RelevanceDialog from '@/views/product/components/RelevanceDialog'
+import { Minimap } from '@antv/g6'
 
 export default {
+  components: { RelevanceDialog },
   data() {
     return {
       i: 0,
       groupId: '',
+      graph: null,
+      treeData: null,
       zoom: 100,
       formulas: '',
       tree: {},
@@ -68,16 +57,16 @@ export default {
       validatedFormulasIds: []
     }
   },
-  mounted() {
-    // this.groupId = this.$route.params.groupId
-    this.register()
-    this.findGroupFormulasTree()
-    // this.findGroupFormulas()
-    // this.findGroupValidatedFormulas()
+  async mounted() {
+    this.groupId = this.$route.params.groupId
+    // this.register()
+    await this.findGroupValidatedFormulas()
+    const data = await this.findGroupFormulasTree()
+    this.generateTree(data)
+    await this.findGroupFormulas()
   },
   methods: {
-    register() {
-    },
+
     handleMenuClick({ data, key }) {
       this[key](data)
     },
@@ -92,16 +81,63 @@ export default {
       data.formulaId = data.id
       data.collapsed = true
       data.id = i
+      if (data.payload && this.validatedFormulasIds.includes(data.payload.masterId)) {
+        data.fill = '#a8f1b3'
+      }
     },
     async findGroupFormulasTree() {
+      const { data } = await FormulaApi.findGroupFormulasTree(this.groupId)
+      this.mapTree(data, this.fillId)
+      data.collapsed = false
+      return data
+    },
+    async findGroupFormulas() {
+      const { data } = await FormulaApi.findGroupFormulas(this.groupId)
+      this.formulas = data
+    },
+    async findGroupValidatedFormulas() {
+      const { data } = await FormulaApi.findGroupValidatedFormulas(this.groupId)
+      this.validatedFormulasIds = data.map(it => it.masterId)
+    },
+    edit(data) {
+      this.formula = data.payload
+      this.formula.references = data.children.map(it => it.id)
+    },
+    async remove() {
+      this.optionSettings.show = false
+      await this.$confirm(this.$t('message.confirmRemove'))
+      const formulaId = this.currentNode.payload.formulaId
+      await FormulaGroupApi.removeChildFormula({ formulaId, formulaGroupId: this.groupId })
+      // const data = await this.findGroupFormulasTree()
+      // this.graph.changeData(data)
+      // this.graph.fitView()
+      this.graph.remove(this.graph.findById(this.currentNode.id))
+      this.$message.success(this.$t('message.removeSuccess'))
+    },
+    async relevance() {
+      this.$refs.relevanceDialog.show()
+    },
+    async toggle() {
+      await FormulaGroupApi.addChildFormulaMaster({
+        formulaGroupId: this.groupId,
+        formulaMasterId: this.currentNode.payload.masterId
+      })
+      this.$message.success(this.$t('message.success'))
+      this.optionSettings.show = false
+      const nodeData = this.graph.findDataById(this.currentNode.id)
+      if (nodeData.fill === '#fff') {
+        nodeData.fill = '#a8f1b3'
+      } else {
+        nodeData.fill = '#fff'
+      }
+      this.graph.refresh()
+    },
+    generateTree(data) {
       const minimap = new Minimap({
         size: [100, 100],
         className: 'minimap',
         type: 'delegate'
       })
-      const { data } = await FormulaApi.findGroupFormulasTree(this.groupId)
-      this.mapTree(data, this.fillId)
-      data.collapsed = false
       const container = document.getElementById('container')
       const width = container.scrollWidth
       const height = container.scrollHeight || 500
@@ -110,30 +146,18 @@ export default {
         container: 'container',
         width,
         height,
-        renderer: 'svg',
-        linkCenter: true,
         modes: {
           default: [
-            {
-              type: 'collapse-expand',
-              onChange: function onChange(item, collapsed) {
-                const data = item.get('model')
-                // const icon = item.get('group').find(element => element.get('name') === 'collapse-icon')
-                if (collapsed) {
-                  // icon.attr('symbol', EXPAND_ICON)
-                } else {
-                  // icon.attr('symbol', COLLAPSE_ICON)
-                }
-                data.collapsed = collapsed
-                return true
-              }
-            },
             'drag-canvas',
             'zoom-canvas'
           ]
         },
         defaultNode: {
-          type: 'rect'
+          type: 'tree-node',
+          anchorPoints: [
+            [0, 0.5],
+            [1, 0.5]
+          ]
           // type: 'dom-node',
           // size: [120, 40]
         },
@@ -159,7 +183,7 @@ export default {
             return 10
           },
           getHGap: function getHGap() {
-            return 66
+            return 150
           }
         }
       })
@@ -176,39 +200,26 @@ export default {
         this.optionSettings.y = evt.clientY - Y
         this.currentNode = evt.item.getModel()
       })
-
+      graph.on('node:click', ({ item, target }) => {
+        const data = item.getModel()
+        const { attrs: { isCollapseShape, isCheckedShape } } = target
+        if (isCollapseShape) {
+          const flag = item.get('group').find(element => element.get('name') === 'collapse-flag')
+          data.collapsed = !data.collapsed
+          flag.attr('text', data.collapsed ? '+' : '-')
+          graph.layout()
+        }
+        if (isCheckedShape) {
+          const checked = item.get('group').find(element => element.get('name') === 'checked-flag')
+          data.checked = !data.checked
+          checked.attr('text', data.checked ? '✔' : '')
+          graph.layout()
+        }
+      })
       graph.on('node:mouseleave', () => {
         this.optionSettings.show = false
       })
-    },
-    async findGroupFormulas() {
-      const { data } = await FormulaApi.findGroupFormulas(this.groupId)
-      this.formulas = data
-    },
-    async findGroupValidatedFormulas() {
-      const { data } = await FormulaApi.findGroupValidatedFormulas(this.groupId)
-      this.validatedFormulasIds = data.map(it => it.masterId)
-    },
-    edit(data) {
-      this.formula = data.payload
-      this.formula.references = data.children.map(it => it.id)
-    },
-    async remove(data) {
-      await this.$confirm(this.$t('message.confirmRemove'))
-      const formulaId = data.payload.formulaId
-      await FormulaGroupApi.removeChildFormula({ formulaId, formulaGroupId: this.groupId })
-      await this.findGroupFormulasTree()
-      this.$message.success('message.removeSuccess')
-    },
-    async relevance(data) {
-      const resp = await FormulaApi.findAllMaster()
-      this.dialogVisible = true
-      this.masters = resp.data
-    },
-    confirmRelevance() {
-    },
-    toggle(data) {
-      console.log(data)
+      this.graph = graph
     }
   }
 }

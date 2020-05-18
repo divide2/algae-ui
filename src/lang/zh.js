@@ -30,7 +30,11 @@ export default {
     masterName: '公式Master名',
     formula: '公式内容',
     masterDesc: '公式描述',
-    reference: '关联公式'
+    reference: '关联公式',
+    formulaInitValue: '初始值',
+    formulaValueType: '值类型',
+    formulaVersion: '版本',
+    formulaDesc: '公式描述'
   },
   dashboard: {
     visitCount: '总访问次数',
@@ -101,7 +105,8 @@ export default {
     update: '更新',
     retry: '重试',
     formulaGroup: '公式组',
-    formula: '公式'
+    formula: '公式',
+    toggle: '切换显示'
   },
   status: {
     basic: {

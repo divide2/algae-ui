@@ -116,7 +116,7 @@ export const asyncRoutes = [
         path: 'product/:productId/group/:groupId/formula',
         name: 'formula',
         hidden: true,
-        component: () => import('@/views/product/Formula'),
+        component: () => import('@/views/product/FormulaView'),
         meta: { title: 'formula' }
       },
       {
@@ -139,6 +139,28 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/product/FormulaGroup'),
         meta: { title: 'formulaGroup' }
+      }
+    ]
+  },
+  {
+    path: '/master',
+    name: 'master',
+    component: Layout,
+    redirect: '/masters',
+    meta: { title: 'formula', icon: 'table' },
+    children: [
+      {
+        path: 'masters',
+        name: 'masters',
+        component: () => import('@/views/formula/List'),
+        meta: { title: 'masters' }
+      },
+      {
+        path: 'masters/:id/formulas',
+        name: 'masterFormulas',
+        hidden: true,
+        component: () => import('@/views/formula/FormulaList'),
+        meta: { title: 'masterFormulas' }
       }
     ]
   },

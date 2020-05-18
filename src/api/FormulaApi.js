@@ -12,5 +12,27 @@ export default {
   },
   findAllMaster() {
     return axios.get('/v1/formula/master/all')
+  },
+  findFormulaByMaster(masterId) {
+    return axios.get(`/v1/formula/by/master/${masterId}`)
+  },
+  findFormulaTreeByMaster(masterId) {
+    return axios.get(`/v1/formula/tree/by/master/${masterId}`)
+  },
+  findMasterTreeByFormula(formulaId) {
+    return axios.get(`/v1/formula/master/tree/by/formula/${formulaId}`)
+  },
+  updateMaster(data) {
+    return axios.put('/v1/formula/master', data)
+  },
+  addMaster(data) {
+    return axios.post('/v1/formula/master', data)
+  },
+  updateFormula(data) {
+    return axios.put('/v1/formula', data)
+  },
+  addFormula(data) {
+    return axios.post('/v1/formula', data)
   }
+
 }

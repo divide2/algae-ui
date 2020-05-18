@@ -4,7 +4,7 @@ export default {
   list(params) {
     return axios.get('/v1/product/all', { params })
   },
-  add(params) {
-    return axios.post('/v1/product', { params })
+  add(data) {
+    return axios.post('/v1/product', data)
   }
 }
