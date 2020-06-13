@@ -4,7 +4,7 @@
       <el-col :span="10">
         <el-form>
           <el-form-item :label="$t('formula.masterName')">
-            <el-select v-model="formula.masterId" filterable @change="onFormulaSelect">
+            <el-select v-model="masterId" filterable @change="onFormulaSelect">
               <el-option v-for="item in masters" :key="item.id" :value="item.id" :label="item.formulaName" />
             </el-select>
           </el-form-item>
@@ -28,8 +28,8 @@
             {{ formula.formulaName }}
           </el-form-item>
           <el-form-item :label="$t('formula.formula')">
-            {{ formula.formula }}
-            <!--            <el-input v-model="formula.formula" type="textarea" autosize></el-input>-->
+<!--            {{ formula.formula }}-->
+            <el-input v-model="formula.formula" type="textarea" autosize></el-input>
           </el-form-item>
         </el-form>
       </el-card>
@@ -56,6 +56,7 @@ export default {
         formula: '',
         formulaName: ''
       },
+      masterId: '',
       checkedFormulaIds: [],
       dialogVisible: false
     }

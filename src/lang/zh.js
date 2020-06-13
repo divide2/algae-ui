@@ -36,6 +36,13 @@ export default {
     formulaVersion: '版本',
     formulaDesc: '公式描述'
   },
+  rateDefinition: {
+    dbColumnName: '列名',
+    dbTableName: '表名',
+    factors: '因子',
+    rateName: '费率名',
+    searchRateSqlTemplate: '模板'
+  },
   dashboard: {
     visitCount: '总访问次数',
     cmdRunCount: '指令运行总数',
@@ -106,7 +113,8 @@ export default {
     retry: '重试',
     formulaGroup: '公式组',
     formula: '公式',
-    toggle: '切换显示'
+    toggle: '切换显示',
+    rateDefinition: '费率定义'
   },
   status: {
     basic: {

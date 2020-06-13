@@ -15,5 +15,8 @@ export default {
   },
   add(data) {
     return axios.post('/v1/formula/group', data)
+  },
+  run(param) {
+    return axios.post(`/v1/formula/group/${param.formulaGroupId}/run/in/product/${param.productId}`, param.factors)
   }
 }

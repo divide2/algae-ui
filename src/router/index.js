@@ -139,6 +139,13 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/product/FormulaGroup'),
         meta: { title: 'formulaGroup' }
+      },
+      {
+        path: '/product/:id/rate/definition',
+        name: 'rateDefinition',
+        hidden: true,
+        component: () => import('@/views/product/ProductRateDefinition'),
+        meta: { title: 'rateDefinition' }
       }
     ]
   },

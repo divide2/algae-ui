@@ -1,6 +1,39 @@
 <template>
   <el-card ref="root">
-    <el-button type="success" size="small">
+    <el-drawer
+      :visible.sync="drawer"
+      direction="rtl">
+      <el-card>
+        <el-form label-width="120px" size="mini" :model="formula" class="demo-form-inline">
+          <el-form-item :label="$t('formula.formulaName')">
+            <el-input v-model="formula.formulaName"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('formula.masterName')">
+            <el-input v-model="formula.masterName"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('formula.formula')">
+            <el-input v-model="formula.formula" type="textarea" autosize></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('formula.formulaInitValue')">
+            <el-input v-model="formula.formulaInitValue" type="textarea" autosize></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('formula.masterDesc')">
+            <el-input v-model="formula.masterDesc"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('formula.reference')">
+            <el-select v-model="formula.references" multiple filterable>
+              <el-option
+                v-for="item in formulas"
+                :key="item.id"
+                :label="item.formulaName"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-card>
+    </el-drawer>
+    <el-button type="success" size="small" @click="toRun">
       {{ $t('button.run') }}
       <i class="el-icon-caret-right  el-icon--right" />
     </el-button>
@@ -17,6 +50,23 @@
       <li class="el-dropdown-menu__item" @click="remove">{{ $t('button.remove') }}</li>
     </ul>
     <relevance-dialog ref="relevanceDialog" />
+    <el-dialog :visible.sync="runDialog" :close-on-click-modal="false" width="80%" top="5vh">
+      <el-button type="success" size="mini" slot="title" @click="confirmRun">{{ $t('button.run') }}</el-button>
+      <el-form label-width="120px" size="mini" label-position="top" class="demo-form-inline">
+        <el-row>
+          <el-col :span="10">
+            <el-form-item :label="$t('runParam.factors')">
+              <el-input v-model="factors" type="textarea" autosize></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="14">
+            <el-form-item :label="$t('runParam.runResult')">
+              <el-input v-model="runResult" type="textarea" autosize></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </el-card>
 </template>
 <script>
@@ -32,6 +82,7 @@ export default {
     return {
       i: 0,
       groupId: '',
+      productId: '',
       graph: null,
       treeData: null,
       zoom: 100,
@@ -44,6 +95,10 @@ export default {
         x: 0,
         y: 0
       },
+      runDialog: false,
+      runResult: '',
+      factors: '',
+      runParam: {},
       currentNode: {},
       masters: [],
       formula: {
@@ -59,6 +114,7 @@ export default {
   },
   async mounted() {
     this.groupId = this.$route.params.groupId
+    this.productId = this.$route.params.productId
     // this.register()
     await this.findGroupValidatedFormulas()
     const data = await this.findGroupFormulasTree()
@@ -66,7 +122,16 @@ export default {
     await this.findGroupFormulas()
   },
   methods: {
-
+    toRun() {
+      this.runDialog = true
+    },
+    async confirmRun() {
+      this.runParam.productId = this.productId
+      this.runParam.formulaGroupId = this.groupId
+      this.runParam.factors = JSON.parse(this.factors)
+      const { data } = await FormulaGroupApi.run(this.runParam)
+      this.runResult = data.map(item => item.join(' ')).join('\n')
+    },
     handleMenuClick({ data, key }) {
       this[key](data)
     },
@@ -92,7 +157,7 @@ export default {
       return data
     },
     async findGroupFormulas() {
-      const { data } = await FormulaApi.findGroupFormulas(this.groupId)
+      const { data } = await FormulaApi.findAllMaster(this.groupId)
       this.formulas = data
     },
     async findGroupValidatedFormulas() {
@@ -208,12 +273,15 @@ export default {
           data.collapsed = !data.collapsed
           flag.attr('text', data.collapsed ? '+' : '-')
           graph.layout()
-        }
-        if (isCheckedShape) {
+        } else if (isCheckedShape) {
           const checked = item.get('group').find(element => element.get('name') === 'checked-flag')
           data.checked = !data.checked
           checked.attr('text', data.checked ? '✔' : '')
           graph.layout()
+        } else {
+          this.drawer = true
+          this.formula = item.getModel().payload
+          console.log(this.formula)
         }
       })
       graph.on('node:mouseleave', () => {

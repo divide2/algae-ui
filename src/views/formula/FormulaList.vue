@@ -111,7 +111,6 @@ export default {
     },
     toAdd() {
       this.dialogVisible = true
-      this.formula = {}
     },
     async confirm() {
       this.formula.masterId = this.masterId
