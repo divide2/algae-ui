@@ -33,6 +33,9 @@
           <el-button size="mini" type="info" @click="toRateDefinition(row)">
             {{ $t('button.rateDefinition') }}
           </el-button>
+          <el-button size="mini" type="info" @click="toRule(row)">
+            {{ $t('button.rule') }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,8 +76,7 @@ export default {
       product: {
         productCode: ''
       },
-      query: {
-      }
+      query: {}
     }
   },
   created() {
@@ -97,12 +99,17 @@ export default {
     },
     toFormulaGroup(row) {
       this.$router.push({
-        name: 'formulaGroup', params: { id: row.productCode }
+        name: 'formulaGroup', params: { id: row.id }
       })
     },
     toRateDefinition(row) {
       this.$router.push({
         name: 'rateDefinition', params: { id: row.id }
+      })
+    },
+    toRule(row) {
+      this.$router.push({
+        name: 'rule', params: { id: row.id }
       })
     },
     async remove(row) {

@@ -46,6 +46,7 @@
                 <el-option value="agentCate" label="agentCate" />
                 <el-option value="emFactor" label="emFactor" />
                 <el-option value="sumAssured" label="sumAssured" />
+                <el-option value="discountCode" label="discountCode" />
               </el-select>
             </el-form-item>
           </el-col>

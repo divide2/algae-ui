@@ -3,7 +3,6 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
-
 import Element from 'element-ui'
 import './styles/element-variables.scss'
 
@@ -16,8 +15,12 @@ import i18n from './lang' // internationalization
 import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
-
 import * as filters from './filters' // global filters
+import 'codemirror/lib/codemirror.css'
+import OrgTree from 'v-org-tree'
+import 'v-org-tree/dist/v-org-tree.css'
+import importDirective from '@/directive'
+import { directive as clickOutside } from 'v-click-outside-x'
 
 /**
  * If you don't want to use mock-server
@@ -40,12 +43,8 @@ Object.keys(filters).forEach(key => {
 
 Vue.config.productionTip = false
 
-import OrgTree from 'v-org-tree'
-import 'v-org-tree/dist/v-org-tree.css'
 Vue.use(OrgTree)
 
-import importDirective from '@/directive'
-import { directive as clickOutside } from 'v-click-outside-x'
 // 注册指令
 importDirective(Vue)
 Vue.directive('clickOutside', clickOutside)

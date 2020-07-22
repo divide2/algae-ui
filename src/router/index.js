@@ -146,6 +146,13 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/product/ProductRateDefinition'),
         meta: { title: 'rateDefinition' }
+      },
+      {
+        path: '/product/:id/rule',
+        name: 'rule',
+        hidden: true,
+        component: () => import('@/views/product/Rule'),
+        meta: { title: 'rule' }
       }
     ]
   },
