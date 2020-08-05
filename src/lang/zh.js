@@ -4,7 +4,11 @@ export default {
     profile: '个人中心',
     product: '产品',
     formulaGroup: '公式组',
-    formula: '公式'
+    formula: '公式',
+    masters: '公式Master',
+    validate: '验证',
+    validates: '验证',
+    basic: '基础'
   },
   navbar: {
     dashboard: '首页',
@@ -42,6 +46,12 @@ export default {
     factors: '因子',
     rateName: '费率名',
     searchRateSqlTemplate: '模板'
+  },
+  validate: {
+    field: '字段',
+    version: '版本',
+    valid: '验证规则',
+    component: '验证位置'
   },
   dashboard: {
     visitCount: '总访问次数',
@@ -114,7 +124,11 @@ export default {
     formulaGroup: '公式组',
     formula: '公式',
     toggle: '切换显示',
-    rateDefinition: '费率定义'
+    rateDefinition: '费率定义',
+    rule: '规则',
+    addVersion: '添加版本',
+    validate: '验证',
+    relateValidate: '关联验证'
   },
   status: {
     basic: {
@@ -123,6 +137,10 @@ export default {
         used: '已占用'
       }
     }
+  },
+  runParam: {
+    factors: 'Factor',
+    runResult: '结果'
   },
   message: {
     required: '必填',

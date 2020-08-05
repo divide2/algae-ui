@@ -153,6 +153,13 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/product/Rule'),
         meta: { title: 'rule' }
+      },
+      {
+        path: '/product/:id/validate',
+        name: 'productValidate',
+        hidden: true,
+        component: () => import('@/views/product/Validate'),
+        meta: { title: 'product-validate' }
       }
     ]
   },
@@ -175,6 +182,21 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/formula/FormulaList'),
         meta: { title: 'masterFormulas' }
+      }
+    ]
+  },
+  {
+    path: '/validate',
+    name: 'validate',
+    component: Layout,
+    redirect: '/validates',
+    meta: { title: 'validate', icon: 'table' },
+    children: [
+      {
+        path: 'validates',
+        name: 'validates',
+        component: () => import('@/views/validate/List'),
+        meta: { title: 'validates' }
       }
     ]
   },

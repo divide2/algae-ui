@@ -6,7 +6,8 @@
         :placeholder="$t('product.productCode')"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="search" />
+        @keyup.enter.native="search"
+      />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="search">
         {{ $t('button.search') }}
       </el-button>
@@ -33,8 +34,11 @@
           <el-button size="mini" type="info" @click="toRateDefinition(row)">
             {{ $t('button.rateDefinition') }}
           </el-button>
-          <el-button size="mini" type="info" @click="toRule(row)">
+          <el-button size="mini" type="warning" @click="toRule(row)">
             {{ $t('button.rule') }}
+          </el-button>
+          <el-button size="mini" type="success" @click="toValidate(row)">
+            {{ $t('button.validate') }}
           </el-button>
         </template>
       </el-table-column>
@@ -45,7 +49,7 @@
         <el-row>
           <el-col :span="10">
             <el-form-item :label="$t('product.productCode')+':'">
-              <el-input v-model="product.productCode"></el-input>
+              <el-input v-model="product.productCode" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -110,6 +114,11 @@ export default {
     toRule(row) {
       this.$router.push({
         name: 'rule', params: { id: row.id }
+      })
+    },
+    toValidate(row) {
+      this.$router.push({
+        name: 'productValidate', params: { id: row.id }
       })
     },
     async remove(row) {
