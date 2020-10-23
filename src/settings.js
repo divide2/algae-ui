@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Proee',
+  title: 'Algae',
 
   /**
    * @type {boolean} true | false
