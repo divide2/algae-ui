@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="query.imei"
+        v-model="query.name"
         :placeholder="$t('product.productCode')"
         style="width: 200px;"
         class="filter-item"
@@ -21,26 +21,17 @@
       style="width: 100%;"
     >
       <el-table-column label="#" type="index" />
-      <el-table-column :label="$t('product.productCode')" prop="productCode" />
-      <el-table-column :label="$t('product.productName')" prop="productNameDesc.nameCN" />
+      <el-table-column :label="$t('product.id')" prop="id" />
+      <el-table-column :label="$t('product.name')" prop="name" />
       <el-table-column :label="$t('table.action')">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="toFormulaGroup(row)">
-            {{ $t('button.formulaGroup') }}
-          </el-button>
-          <el-button size="mini" type="info" @click="toRateDefinition(row)">
-            {{ $t('button.rateDefinition') }}
-          </el-button>
-          <el-button size="mini" type="warning" @click="toRule(row)">
-            {{ $t('button.rule') }}
-          </el-button>
-          <el-button size="mini" type="success" @click="toValidate(row)">
-            {{ $t('button.validate') }}
+          <el-button size="mini" type="primary" @click="toValidate(row)">
+            {{ $t('button.edit') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="query.pageNo" :limit.sync="query.pageSize" @pagination="page" />
+    <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.size" @pagination="page" />
     <el-dialog :visible.sync="dialogVisible">
       <el-form label-width="120px" size="mini" :model="product" class="demo-form-inline">
         <el-row>
@@ -77,7 +68,10 @@ export default {
       product: {
         productCode: ''
       },
-      query: {}
+      query: {
+        page: 1,
+        size: 10
+      }
     }
   },
   created() {
@@ -86,8 +80,9 @@ export default {
   methods: {
     async page() {
       this.loading = true
-      const data = await ProductApi.list(this.query)
-      this.list = data.data
+      const data = await ProductApi.find(this.query)
+      this.list = data.content
+      this.total = data.totalElements
       this.loading = false
     },
     toAdd() {

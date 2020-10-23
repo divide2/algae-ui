@@ -20,12 +20,12 @@
           <el-button type="primary" size="large" class="submit-btn" @click="login">{{ $t('login.logIn') }}</el-button>
         </el-form-item>
       </el-form>
-      <div class="other-login-box">
-        <span>{{ $t('login.thirdparty') }}</span>
-        <el-button circle plain @click="googleLogin">
-          <img class="thirdparty" src="@/assets/google.png" height="20" width="20">
-        </el-button>
-      </div>
+      <!--      <div class="other-login-box">-->
+      <!--        <span>{{ $t('login.thirdparty') }}</span>-->
+      <!--        <el-button circle plain @click="googleLogin">-->
+      <!--          <img class="thirdparty" src="@/assets/google.png" height="20" width="20">-->
+      <!--        </el-button>-->
+      <!--      </div>-->
     </div>
   </div>
 
