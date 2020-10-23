@@ -2,23 +2,27 @@
   <el-card ref="root">
     <el-drawer
       :visible.sync="drawer"
-      direction="rtl">
+      direction="rtl"
+    >
       <el-card>
         <el-form label-width="120px" size="mini" :model="formula" class="demo-form-inline">
-          <el-form-item :label="$t('formula.formulaName')">
-            <el-input v-model="formula.formulaName"></el-input>
-          </el-form-item>
           <el-form-item :label="$t('formula.masterName')">
-            <el-input v-model="formula.masterName"></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('formula.formula')">
-            <el-input v-model="formula.formula" type="textarea" autosize></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('formula.formulaInitValue')">
-            <el-input v-model="formula.formulaInitValue" type="textarea" autosize></el-input>
+            <el-input v-model="formula.masterName" />
           </el-form-item>
           <el-form-item :label="$t('formula.masterDesc')">
-            <el-input v-model="formula.masterDesc"></el-input>
+            <el-input v-model="formula.masterDesc" />
+          </el-form-item>
+          <el-form-item :label="$t('formula.formulaName')">
+            <el-input v-model="formula.formulaName" />
+          </el-form-item>
+          <el-form-item :label="$t('formula.formulaVersion')">
+            <el-input v-model="formula.formulaVersion" />
+          </el-form-item>
+          <el-form-item :label="$t('formula.formula')">
+            <el-input v-model="formula.formula" type="textarea" autosize />
+          </el-form-item>
+          <el-form-item :label="$t('formula.formulaInitValue')">
+            <el-input v-model="formula.formulaInitValue" type="textarea" autosize />
           </el-form-item>
           <el-form-item :label="$t('formula.reference')">
             <el-select v-model="formula.references" multiple filterable>
@@ -26,17 +30,22 @@
                 v-for="item in formulas"
                 :key="item.id"
                 :label="item.formulaName"
-                :value="item.id">
-              </el-option>
+                :value="item.id"
+              />
             </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="success" size="small">
+              {{ $t('button.update') }}
+            </el-button>
           </el-form-item>
         </el-form>
       </el-card>
     </el-drawer>
-    <el-button type="success" size="small" @click="toRun">
-      {{ $t('button.run') }}
-      <i class="el-icon-caret-right  el-icon--right" />
-    </el-button>
+    <!--    <el-button type="success" size="small" @click="toRun">-->
+    <!--      {{ $t('button.run') }}-->
+    <!--      <i class="el-icon-caret-right  el-icon&#45;&#45;right" />-->
+    <!--    </el-button>-->
     <el-card>
       <div id="container" />
     </el-card>
@@ -48,24 +57,31 @@
       <li class="el-dropdown-menu__item" @click="relevance">{{ $t('button.relevance') }}</li>
       <li class="el-dropdown-menu__item" @click="toggle">{{ $t('button.toggle') }}</li>
       <li class="el-dropdown-menu__item" @click="remove">{{ $t('button.remove') }}</li>
+      <li class="el-dropdown-menu__item" @click="viewRelatedProduct">{{ $t('button.viewRelatedProduct') }}</li>
     </ul>
     <relevance-dialog ref="relevanceDialog" />
     <el-dialog :visible.sync="runDialog" :close-on-click-modal="false" width="80%" top="5vh">
-      <el-button type="success" size="mini" slot="title" @click="confirmRun">{{ $t('button.run') }}</el-button>
+      <el-button slot="title" type="success" size="mini" @click="confirmRun">{{ $t('button.run') }}</el-button>
       <el-form label-width="120px" size="mini" label-position="top" class="demo-form-inline">
         <el-row>
           <el-col :span="10">
             <el-form-item :label="$t('runParam.factors')">
-              <el-input v-model="factors" type="textarea" autosize></el-input>
+              <el-input v-model="factors" type="textarea" autosize />
             </el-form-item>
           </el-col>
           <el-col :span="14">
             <el-form-item :label="$t('runParam.runResult')">
-              <el-input v-model="runResult" type="textarea" autosize></el-input>
+              <el-input v-model="runResult" type="textarea" autosize />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
+    </el-dialog>
+    <el-dialog :visible.sync="viewProductDialog" width="30%" top="5vh">
+      <el-table :data="viewProducts">
+        <el-table-column prop="productCode" />
+        <el-table-column prop="name" />
+      </el-table>
     </el-dialog>
   </el-card>
 </template>
@@ -109,7 +125,9 @@ export default {
         masterDesc: '',
         references: []
       },
-      validatedFormulasIds: []
+      validatedFormulasIds: [],
+      viewProducts: [],
+      viewProductDialog: false
     }
   },
   async mounted() {
@@ -147,7 +165,7 @@ export default {
       data.collapsed = true
       data.id = i
       if (data.payload && this.validatedFormulasIds.includes(data.payload.masterId)) {
-        data.fill = '#a8f1b3'
+        data.highlight = true
       }
     },
     async findGroupFormulasTree() {
@@ -179,6 +197,12 @@ export default {
       this.graph.remove(this.graph.findById(this.currentNode.id))
       this.$message.success(this.$t('message.removeSuccess'))
     },
+    async viewRelatedProduct() {
+      const formulaId = this.currentNode.payload.formulaId
+      const { data } = await FormulaApi.findRelatedProduct(formulaId)
+      this.viewProducts = data
+      this.viewProductDialog = true
+    },
     async relevance() {
       this.$refs.relevanceDialog.show()
     },
@@ -190,12 +214,13 @@ export default {
       this.$message.success(this.$t('message.success'))
       this.optionSettings.show = false
       const nodeData = this.graph.findDataById(this.currentNode.id)
-      if (nodeData.fill === '#fff') {
-        nodeData.fill = '#a8f1b3'
-      } else {
-        nodeData.fill = '#fff'
-      }
-      this.graph.refresh()
+      nodeData.highlight = !nodeData.highlight
+      // this.reloadTree()
+      this.graph.layout()
+    },
+    async reloadTree() {
+      const data = await this.findGroupFormulasTree()
+      this.graph.changeData(data)
     },
     generateTree(data) {
       const minimap = new Minimap({
@@ -267,7 +292,7 @@ export default {
       })
       graph.on('node:click', ({ item, target }) => {
         const data = item.getModel()
-        const { attrs: { isCollapseShape, isCheckedShape } } = target
+        const { attrs: { isCollapseShape, isCheckedShape }} = target
         if (isCollapseShape) {
           const flag = item.get('group').find(element => element.get('name') === 'collapse-flag')
           data.collapsed = !data.collapsed

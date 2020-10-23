@@ -3,7 +3,7 @@
     <div class="login-container">
       <div class="title-box">
         <img src="@/assets/logo.png" width="39" height="39">
-        <span class="login-title">Snap Dragon</span>
+        <span class="login-title">Proee</span>
       </div>
       <el-form ref="loginForm" :rules="loginRules" :model="loginForm">
         <el-form-item prop="username" style="margin-top: 50px;">

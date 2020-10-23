@@ -7,9 +7,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            {{ $t('dashboard.visitCount') }}
+            {{ $t('dashboard.productCount') }}
           </div>
-          <count-to :start-val="0" :end-val="counts.visitCount" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="counts.productCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -20,9 +20,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            {{ $t('dashboard.cmdRunCount') }}
+            {{ $t('dashboard.formulaCount') }}
           </div>
-          <count-to :start-val="0" :end-val="counts.cmdRunCount" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="counts.formulaCount" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,9 +33,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            {{ $t('dashboard.caseCount') }}
+            {{ $t('dashboard.masterCount') }}
           </div>
-          <count-to :start-val="0" :end-val="counts.caseCount" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="counts.masterCount" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -59,9 +59,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            {{ $t('dashboard.instanceExecCount') }}
+            {{ $t('dashboard.formulaGroupCount') }}
           </div>
-          <count-to :start-val="0" :end-val="counts.instanceExecCount" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="counts.groupCount" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -78,7 +78,12 @@ export default {
   },
   data() {
     return {
-      counts: {}
+      counts: {
+        productCount: 0,
+        masterCount: 0,
+        formulaCount: 0,
+        groupCount: 0
+      }
     }
   },
   created() {
@@ -86,7 +91,8 @@ export default {
   },
   methods: {
     async getCounts() {
-      this.counts = await DashboardApi.getCounts()
+      const { data } = await DashboardApi.getCounts()
+      this.counts = data
     },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)

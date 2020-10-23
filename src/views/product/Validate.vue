@@ -9,8 +9,11 @@
         <el-option value="premiums_result" label="premiums_result" />
         <el-option value="sumAssured_result" label="sumAssured_result" />
       </el-select>
-      <el-button class="filter-item" type="primary" icon="el-icon-create" @click="toRelate">
+      <el-button class="filter-item" type="primary" @click="toRelate">
         {{ $t('button.relateValidate') }}
+      </el-button>
+      <el-button class="filter-item" type="primary" @click="toDescribe">
+        {{ $t('button.describe') }}
       </el-button>
     </div>
     <el-divider />
@@ -53,15 +56,29 @@
         <el-button type="primary" @click="confirm">{{ $t('button.confirm') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="descdialogVisible">
+      <el-card>
+        <codemirror :value="validateDescribe" :options="cmOptions" />
+      </el-card>
+    </el-dialog>
+
   </el-card>
 </template>
 
 <script>
 import ValidateApi from '@/api/ValidateApi'
+// require component
+import { codemirror } from 'vue-codemirror'
+// require styles
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/javascript/javascript.js'
+// theme css
+import 'codemirror/theme/base16-dark.css'
+import { toStrFun } from '@/utils/util'
 
 export default {
   name: 'Rule',
-
+  components: { codemirror },
   data() {
     return {
       params: {
@@ -73,7 +90,20 @@ export default {
       },
       validates: [],
       allValidates: [],
-      dialogVisible: false
+      dialogVisible: false,
+      validateDescribe: '',
+      descdialogVisible: false,
+      cmOptions: {
+        // codemirror options
+        tabSize: 4,
+        mode: 'text/javascript',
+        theme: 'base16-dark',
+        lineNumbers: true,
+        line: true,
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers']
+        // more codemirror options, 更多 codemirror 的高级配置...
+      }
     }
   },
   created() {
@@ -93,6 +123,29 @@ export default {
       })
     },
     toUpdate(row) {
+    },
+    toDescribe() {
+      ValidateApi.listByProduct(this.id).then(data => {
+        const origin = data.data
+        if (origin) {
+          const productCode = origin[0].productLife.productCode
+          const result = origin.map(it => (
+            {
+              component: it.component,
+              field: it.validate.field,
+              version: it.validate.version
+            })
+          ).reduce((results, value) => {
+            (results[value.component] || (results[value.component] = {}))[value.field] = value.version
+            return results
+          }, {})
+          const des = {
+            [productCode]: result
+          }
+          this.validateDescribe = toStrFun(des)
+          this.descdialogVisible = true
+        }
+      })
     },
     toRelate() {
       this.dialogVisible = true

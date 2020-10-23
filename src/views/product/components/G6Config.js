@@ -5,7 +5,7 @@ G6.registerNode('tree-node',
     draw(cfg, group) {
       const rect = group.addShape('rect', {
         attrs: {
-          fill: cfg.fill || '#fff',
+          fill: cfg.highlight ? '#a8f1b3' : '#fff',
           stroke: '#666'
         },
         name: 'rect-shape'

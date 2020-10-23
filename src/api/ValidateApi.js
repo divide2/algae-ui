@@ -2,7 +2,10 @@ import axios from '@/utils/t-request'
 
 export default {
   listByProduct(productId, component) {
-    return axios.get(`/v1/product/${productId}/${component}/validate`)
+    return axios.get(`/v1/product/${productId}/validate`,
+      {
+        params: { component }
+      })
   },
   list() {
     return axios.get(`/v1/validate`)

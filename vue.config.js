@@ -35,6 +35,7 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    disableHostCheck: true,
     headers: {},
     proxy: {
       // change xxx-api/login => mock/login

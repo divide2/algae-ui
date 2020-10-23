@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div class="filter-container">
-      <el-button class="filter-item" type="primary" icon="el-icon-create" @click="toAdd">
+      <el-button class="filter-item" type="primary" @click="toAdd">
         {{ $t('button.create') }}
       </el-button>
     </div>
@@ -27,7 +27,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item :label="$t('formula.formulaName')+':'">
-              <el-input v-model="formula.formulaName"></el-input>
+              <el-input v-model="formula.formulaName" />
             </el-form-item>
           </el-col>
           <el-col :span="10">
@@ -42,21 +42,19 @@
         </el-row>
         <el-row>
           <el-form-item :label="$t('formula.formula')+':'">
-            <el-input v-model="formula.formula"></el-input>
+            <el-input v-model="formula.formula" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item :label="$t('formula.formulaInitValue')+':'">
-            <el-input v-model="formula.formulaInitValue"></el-input>
+            <el-input v-model="formula.formulaInitValue" />
           </el-form-item>
         </el-row>
-        <el-row>
-
-        </el-row>
+        <el-row />
         <el-row>
           <el-col :span="10">
             <el-form-item :label="$t('formula.formulaVersion')+':'">
-              <el-input v-model="formula.formulaVersion"></el-input>
+              <el-input v-model="formula.formulaVersion" />
             </el-form-item>
           </el-col>
           <el-col :span="10">

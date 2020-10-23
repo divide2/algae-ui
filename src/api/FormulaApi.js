@@ -33,6 +33,12 @@ export default {
   },
   addFormula(data) {
     return axios.post('/v1/formula', data)
+  },
+  findRelatedProduct(formulaId) {
+    return axios.get(`/v1/formula/${formulaId}/related/product`)
+  },
+  findMasterRelatedFormulas(formulaMasterId) {
+    return axios.get(`/v1/formula/master/${formulaMasterId}/related/formulas`)
   }
 
 }

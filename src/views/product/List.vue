@@ -8,12 +8,8 @@
         class="filter-item"
         @keyup.enter.native="search"
       />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="search">
-        {{ $t('button.search') }}
-      </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-create" @click="toAdd">
-        {{ $t('button.create') }}
-      </el-button>
+      <el-button v-waves class="filter-item" type="primary" @click="search">{{ $t('button.search') }}</el-button>
+      <el-button v-waves class="filter-item" type="primary" @click="toAdd">{{ $t('button.create') }}</el-button>
     </div>
 
     <el-table
@@ -26,6 +22,7 @@
     >
       <el-table-column label="#" type="index" />
       <el-table-column :label="$t('product.productCode')" prop="productCode" />
+      <el-table-column :label="$t('product.productName')" prop="productNameDesc.nameCN" />
       <el-table-column :label="$t('table.action')">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="toFormulaGroup(row)">

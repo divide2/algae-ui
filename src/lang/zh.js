@@ -19,7 +19,8 @@ export default {
     size: '布局大小'
   },
   product: {
-    productCode: '产品编号'
+    productCode: '产品编号',
+    productName: '产品名称'
   },
   formulaGroup: {
     formulaGroupName: '组名',
@@ -54,10 +55,10 @@ export default {
     component: '验证位置'
   },
   dashboard: {
-    visitCount: '总访问次数',
-    cmdRunCount: '指令运行总数',
-    caseCount: '用例总数',
-    instanceCount: '测试总数',
+    productCount: '产品总数',
+    formulaCount: '公式总数',
+    masterCount: '公式Master总数',
+    formulaGroupCount: '组总数',
     instanceExecCount: '测试执行总数',
     cmdRunPerCount: '每日指令运行数量',
     casePerCount: '每日用例运行数量',
@@ -128,7 +129,9 @@ export default {
     rule: '规则',
     addVersion: '添加版本',
     validate: '验证',
-    relateValidate: '关联验证'
+    relateValidate: '关联验证',
+    viewRelatedProduct: '关联产品',
+    viewRelatedFormula: '关联公式'
   },
   status: {
     basic: {

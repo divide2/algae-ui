@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      title: 'Snap Dragon',
+      title: 'Proee',
       logo: logo
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div class="filter-container">
-      <el-button class="filter-item" type="primary" icon="el-icon-create" @click="toAdd">
+      <el-button class="filter-item" type="primary" @click="toAdd">
         {{ $t('button.create') }}
       </el-button>
     </div>
@@ -27,19 +27,19 @@
         <el-row>
           <el-col :span="10">
             <el-form-item :label="$t('formulaGroup.formulaGroupName')+':'">
-              <el-input v-model="formulaGroup.formulaGroupName"></el-input>
+              <el-input v-model="formulaGroup.formulaGroupName" />
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item :label="$t('formulaGroup.formulaGroupDisplayName')+':'">
-              <el-input v-model="formulaGroup.formulaGroupDisplayName"></el-input>
+              <el-input v-model="formulaGroup.formulaGroupDisplayName" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="10">
             <el-form-item :label="$t('formulaGroup.formulaGroupDesc')+':'">
-              <el-input v-model="formulaGroup.formulaGroupDesc"></el-input>
+              <el-input v-model="formulaGroup.formulaGroupDesc" />
             </el-form-item>
           </el-col>
           <el-col :span="10">

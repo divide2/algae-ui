@@ -2,9 +2,9 @@ import axios from '@/utils/t-request'
 
 export default {
   getCounts() {
-    return axios.get('/dashboard/counts')
+    return axios.get('/v1/dashboard/counts')
   },
   getDaysCounts() {
-    return axios.get('/dashboard/counts/days')
+    return axios.get('/v1/dashboard/counts/days')
   }
 }

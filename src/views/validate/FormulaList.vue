@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div class="filter-container">
-      <el-button class="filter-item" type="primary" icon="el-icon-create" @click="toAdd">
+      <el-button class="filter-item" type="primary" @click="toAdd">
         {{ $t('button.create') }}
       </el-button>
     </div>
