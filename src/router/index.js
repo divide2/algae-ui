@@ -185,21 +185,6 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/validate',
-    name: 'validate',
-    component: Layout,
-    redirect: '/validates',
-    meta: { title: 'validate', icon: 'table' },
-    children: [
-      {
-        path: 'validates',
-        name: 'validates',
-        component: () => import('@/views/validate/List'),
-        meta: { title: 'validates' }
-      }
-    ]
-  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
