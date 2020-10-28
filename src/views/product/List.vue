@@ -86,7 +86,10 @@ export default {
       this.loading = false
     },
     toAdd() {
-      this.dialogVisible = true
+      // this.dialogVisible = true
+      this.$router.push({
+        name: 'productAdd'
+      })
     },
     async confirmAdd() {
       await ProductApi.add(this.product)

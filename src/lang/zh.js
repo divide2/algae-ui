@@ -8,7 +8,8 @@ export default {
     masters: '公式Master',
     validate: '验证',
     validates: '验证',
-    basic: '基础'
+    basic: '基础',
+    productAdd: '产品新增'
   },
   navbar: {
     dashboard: '首页',
@@ -175,7 +176,8 @@ export default {
     refresh: '刷新',
     close: '关闭',
     closeOthers: '关闭其它',
-    closeAll: '关闭所有'
+    closeAll: '关闭所有',
+    step: '步骤{0}'
   },
   settings: {
     title: '系统布局配置',

@@ -109,7 +109,7 @@ export const asyncRoutes = [
     path: '/basic',
     name: 'basic',
     component: Layout,
-    redirect: '/basic/laboratory/list',
+    redirect: '/product',
     meta: { title: 'basic', icon: 'table', roles: ['admin'] },
     children: [
       {
@@ -132,6 +132,13 @@ export const asyncRoutes = [
         name: 'product',
         component: () => import('@/views/product/List'),
         meta: { title: 'product' }
+      },
+      {
+        path: '/product/add',
+        name: 'productAdd',
+        hidden: true,
+        component: () => import('@/views/product/add'),
+        meta: { title: 'productAdd' }
       },
       {
         path: '/product/:id/formula/group',
