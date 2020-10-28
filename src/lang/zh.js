@@ -21,7 +21,8 @@ export default {
   },
   product: {
     productCode: '产品编号',
-    productName: '产品名称'
+    productName: '产品名称',
+    tabName: '标签名称'
   },
   formulaGroup: {
     formulaGroupName: '组名',

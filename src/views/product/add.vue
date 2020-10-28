@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
 
-    <el-tabs type="border-card">
-      <el-tab-pane label="产品">
+    <el-tabs v-model="activeTabName" type="border-card" @tab-click="handleClick">
+      <el-tab-pane label="产品" name="product">
         <el-steps :active="activeStep" finish-status="success">
           <el-step :title="$t('tagsView.step',[1])" />
           <el-step :title="$t('tagsView.step',[2])" />
@@ -41,10 +41,27 @@
           </el-row>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="Table1">Table1</el-tab-pane>
-      <el-tab-pane label="Table2">table2</el-tab-pane>
+      <el-tab-pane v-for="(item, index) in newTabs" :key="index" :label="item.label" :name="item.name">{{ item }}</el-tab-pane>
+      <el-tab-pane name="add">
+        <span slot="label"><i class="el-icon-circle-plus-outline" /></span>
+      </el-tab-pane>
     </el-tabs>
     <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+    <el-dialog :visible.sync="dialogVisible">
+      <el-form label-width="120px" size="mini" class="demo-form-inline">
+        <el-row>
+          <el-col :span="10">
+            <el-form-item :label="$t('product.tabName')+':'">
+              <el-input v-model="newTabName" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
+        <el-button type="primary" @click="confirmAddTab">{{ $t('button.confirm') }}</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -62,7 +79,12 @@ export default {
       product: {
         name: '',
         code: ''
-      }
+      },
+      newTabs: [],
+      activeTabName: 'product', // 当前tab的名字
+      dialogVisible: false,
+      newTabName: '',
+      tabsLength: 1
     }
   },
   computed: {},
@@ -73,6 +95,27 @@ export default {
       if (this.activeStep++ > 2) {
         this.activeStep = 0
       }
+    },
+    addTable() {
+      this.tabsLength++
+      const tabName = 'name' + this.tabsLength
+      this.newTabs.push({ label: this.newTabName, table: {}, name: tabName })
+      this.activeTabName = tabName
+    },
+    handleClick(tab, event) {
+      if (tab.name === 'add') {
+        this.showDialog(tab, event)
+      }
+    },
+    confirmAddTab() {
+      this.addTable()
+      this.closeDialog()
+    },
+    showDialog() {
+      this.dialogVisible = true
+    },
+    closeDialog() {
+      this.dialogVisible = false
     }
   }
 }
