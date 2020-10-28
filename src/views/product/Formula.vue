@@ -2,20 +2,21 @@
   <div>
     <el-drawer
       :visible.sync="drawer"
-      direction="rtl">
+      direction="rtl"
+    >
       <el-card>
         <el-form label-width="120px" size="mini" :model="formula" class="demo-form-inline">
           <el-form-item :label="$t('formula.formulaName')">
-            <el-input v-model="formula.formulaName"></el-input>
+            <el-input v-model="formula.formulaName" />
           </el-form-item>
           <el-form-item :label="$t('formula.masterName')">
-            <el-input v-model="formula.masterName"></el-input>
+            <el-input v-model="formula.masterName" />
           </el-form-item>
           <el-form-item :label="$t('formula.formula')">
-            <el-input v-model="formula.formula" type="textarea" autosize></el-input>
+            <el-input v-model="formula.formula" type="textarea" autosize />
           </el-form-item>
           <el-form-item :label="$t('formula.masterDesc')">
-            <el-input v-model="formula.masterDesc"></el-input>
+            <el-input v-model="formula.masterDesc" />
           </el-form-item>
           <el-form-item :label="$t('formula.reference')">
             <el-select v-model="formula.references" multiple filterable>
@@ -23,8 +24,8 @@
                 v-for="item in formulas"
                 :key="item.formulaId"
                 :label="item.masterName"
-                :value="item.masterId">
-              </el-option>
+                :value="item.masterId"
+              />
             </el-select>
           </el-form-item>
         </el-form>
@@ -44,7 +45,7 @@
           :zoom-handled="zoomHandled"
           :validated-items="validatedFormulasIds"
           @on-menu-click="handleMenuClick"
-        ></org-view>
+        />
       </div>
     </div>
     <el-dialog :visible.sync="dialogVisible">
