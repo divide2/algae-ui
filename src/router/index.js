@@ -171,24 +171,17 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/master',
-    name: 'master',
+    path: '/lang',
+    name: 'lang',
     component: Layout,
-    redirect: '/masters',
-    meta: { title: 'formula', icon: 'table' },
+    redirect: '/langs',
+    meta: { title: 'lang', icon: 'table' },
     children: [
       {
-        path: 'masters',
-        name: 'masters',
-        component: () => import('@/views/formula/List'),
-        meta: { title: 'masters' }
-      },
-      {
-        path: 'masters/:id/formulas',
-        name: 'masterFormulas',
-        hidden: true,
-        component: () => import('@/views/formula/FormulaList'),
-        meta: { title: 'masterFormulas' }
+        path: 'langs',
+        name: 'langs',
+        component: () => import('@/views/lang/List'),
+        meta: { title: 'lang' }
       }
     ]
   },
