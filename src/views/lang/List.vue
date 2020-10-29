@@ -21,8 +21,9 @@
       style="width: 100%;"
     >
       <el-table-column label="#" type="index" />
-      <el-table-column :label="$t('product.id')" prop="id" />
-      <el-table-column :label="$t('product.name')" prop="name" />
+      <el-table-column :label="$t('lang.id')" prop="id" />
+      <el-table-column :label="$t('lang.category')" prop="category" />
+      <el-table-column :label="$t('lang.code')" prop="code" />
       <el-table-column :label="$t('table.action')">
         <template slot-scope="{row}">
           <el-button size="mini" type="primary" @click="toValidate(row)">

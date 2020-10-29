@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-
     <el-tabs v-model="activeTabName" type="border-card" @tab-click="handleClick">
       <el-tab-pane label="产品" name="product">
         <el-steps :active="activeStep" finish-status="success">
@@ -62,7 +61,6 @@
         <el-button type="primary" @click="confirmAddTab">{{ $t('button.confirm') }}</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
