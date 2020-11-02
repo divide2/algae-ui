@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeTabName" type="border-card" @tab-click="handleClick">
-      <el-tab-pane label="产品" name="product">
+    <el-tabs v-model="activeTabName" type="card" editable :closable="false" @tab-click="handleClick">
+      <el-tab-pane label="产品" name="product" :closable="false">
         <el-steps :active="activeStep" finish-status="success">
           <el-step :title="$t('tagsView.step',[1])" />
           <el-step :title="$t('tagsView.step',[2])" />
@@ -11,7 +11,8 @@
           <el-row v-show="activeStep===0">
             <el-col :span="10">
               <el-form-item :label="$t('product.productName')+':'">
-                <el-input v-model="product.name" />
+                <!--                <el-input v-model="product.name" />-->
+                <ii-cascader v-model="product.name" :options="options" clearable />
               </el-form-item>
               <el-form-item :label="$t('product.productCode')+':'">
                 <el-input v-model="product.code" />
@@ -41,9 +42,6 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane v-for="(item, index) in newTabs" :key="index" :label="item.label" :name="item.name">{{ item }}</el-tab-pane>
-      <el-tab-pane name="add">
-        <span slot="label"><i class="el-icon-circle-plus-outline" /></span>
-      </el-tab-pane>
     </el-tabs>
     <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
     <el-dialog :visible.sync="dialogVisible">
@@ -67,9 +65,10 @@
 <script>
 // import ProductApi from '@/api/ProductApi' // secondary package based on el-pagination
 
+import IiCascader from '@/components/ii/cascader'
 export default {
   name: 'Product',
-  components: {},
+  components: { IiCascader },
   directives: {},
   data() {
     return {
@@ -78,6 +77,37 @@ export default {
         name: '',
         code: ''
       },
+      options: [{
+        value: 'zhinan',
+        label: '指南',
+        children: [{
+          value: 'shejiyuanze',
+          label: '设计原则',
+          children: [{
+            value: 'yizhi',
+            label: '一致'
+          }, {
+            value: 'fankui',
+            label: '反馈'
+          }, {
+            value: 'xiaolv',
+            label: '效率'
+          }, {
+            value: 'kekong',
+            label: '可控'
+          }]
+        }, {
+          value: 'daohang',
+          label: '导航',
+          children: [{
+            value: 'cexiangdaohang',
+            label: '侧向导航'
+          }, {
+            value: 'dingbudaohang',
+            label: '顶部导航'
+          }]
+        }]
+      }],
       newTabs: [],
       activeTabName: 'product', // 当前tab的名字
       dialogVisible: false,
