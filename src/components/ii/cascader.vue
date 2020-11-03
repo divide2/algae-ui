@@ -78,8 +78,15 @@
         :class="['el-popper', 'el-cascader__dropdown', popperClass]"
       >
         <el-row style="padding: 10px">
-          <el-col :span="16"><el-input size="mini" /></el-col>
-          <el-button type="primary" style="margin-left: 10px">添加</el-button>
+          <el-col :span="16">
+            <el-input
+              v-model.trim="searchValue"
+              size="mini"
+              @input="e => handleInput(searchValue, e)"
+              @click.stop="toggleDropDownVisible(true)"
+            />
+          </el-col>
+          <el-button type="primary" style="margin-left: 10px" @click="showDialog">{{ $t('button.create') }}</el-button>
         </el-row>
         <el-cascader-panel
           v-show="!filtering"
@@ -93,7 +100,6 @@
           @close="toggleDropDownVisible(false)"
         />
         <el-scrollbar
-          v-if="filterable"
           v-show="filtering"
           ref="suggestionPanel"
           tag="ul"
@@ -122,6 +128,24 @@
         </el-scrollbar>
       </div>
     </transition>
+
+    <el-dialog :visible.sync="dialogVisible" append-to-body>
+      <el-form label-width="120px" size="mini" :model="lang" inline>
+        <el-form-item :label="$t('lang.category')+':'">
+          <el-input v-model="lang.category" />
+        </el-form-item>
+        <el-form-item :label="$t('lang.code')+':'">
+          <el-input v-model="lang.code" />
+        </el-form-item>
+        <el-form-item v-for="ld in langDefines" :key="ld.id" :label="ld.name+':'">
+          <el-input v-model="lang[ld.col]" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
+        <el-button type="primary" @click="confirmAdd">{{ $t('button.confirm') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -137,11 +161,12 @@ import ElScrollbar from 'element-ui/packages/scrollbar'
 import ElCascaderPanel from 'element-ui/packages/cascader-panel'
 import AriaUtils from 'element-ui/src/utils/aria-utils'
 import { t } from 'element-ui/src/locale'
-import { isEqual, isEmpty, kebabCase } from 'element-ui/src/utils/util'
-import { isUndefined, isFunction } from 'element-ui/src/utils/types'
+import { isEmpty, isEqual, kebabCase } from 'element-ui/src/utils/util'
+import { isFunction, isUndefined } from 'element-ui/src/utils/types'
 import { isDef } from 'element-ui/src/utils/shared'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event'
 import debounce from 'throttle-debounce/debounce'
+import LangDefineApi from '@/api/LangDefineApi'
 
 const { keys: KeyCode } = AriaUtils
 const MigratingProps = {
@@ -237,7 +262,8 @@ export default {
     },
     beforeFilter: {
       type: Function,
-      default: () => () => {}
+      default: () => () => {
+      }
     },
     popperClass: String
   },
@@ -254,7 +280,11 @@ export default {
       filtering: false,
       suggestions: [],
       inputInitialHeight: 0,
-      pressDeleteCount: 0
+      pressDeleteCount: 0,
+      searchValue: null,
+      dialogVisible: false,
+      lang: {},
+      langDefines: []
     }
   },
 
@@ -369,24 +399,25 @@ export default {
     }
 
     this.filterHandler = debounce(this.debounce, () => {
-      const { inputValue } = this
+      const { searchValue } = this
 
-      if (!inputValue) {
+      if (!searchValue) {
         this.filtering = false
         return
       }
 
-      const before = this.beforeFilter(inputValue)
+      const before = this.beforeFilter(searchValue)
       if (before && before.then) {
         before.then(this.getSuggestions)
       } else if (before !== false) {
-        this.getSuggestions()
+        this.getSuggestions(searchValue)
       } else {
         this.filtering = false
       }
     })
 
     addResizeListener(this.$el, this.updateStyle)
+    this.findLangDefine()
   },
 
   beforeDestroy() {
@@ -394,6 +425,17 @@ export default {
   },
 
   methods: {
+    showDialog() {
+      this.dialogVisible = true
+      this.toggleDropDownVisible(false)
+    },
+    async findLangDefine() {
+      const { content } = await LangDefineApi.find()
+      this.langDefines = content
+    },
+    confirmAdd() {
+
+    },
     getMigratingConfig() {
       return {
         props: {
@@ -411,6 +453,7 @@ export default {
 
       const { dropDownVisible } = this
       const { input } = this.$refs
+
       visible = isDef(visible) ? visible : !dropDownVisible
       if (visible !== dropDownVisible) {
         this.dropDownVisible = visible
@@ -544,7 +587,7 @@ export default {
       this.checkedNodes = checkedNodes
       this.presentTags = tags
     },
-    getSuggestions() {
+    getSuggestions(searchValue) {
       let { filterMethod } = this
 
       if (!isFunction(filterMethod)) {
@@ -555,7 +598,7 @@ export default {
         .filter(node => {
           if (node.isDisabled) return false
           node.text = node.getText(this.showAllLevels, this.separator) || ''
-          return filterMethod(node, this.inputValue)
+          return filterMethod(node, searchValue)
         })
 
       if (this.multiple) {
@@ -619,6 +662,7 @@ export default {
       } else {
         this.checkedValue = targetNode.getValueByOption()
         this.toggleDropDownVisible(false)
+        this.searchValue = ''
       }
     },
     deleteTag(index) {
@@ -654,7 +698,7 @@ export default {
 
     /**
      * public methods
-    */
+     */
     getCheckedNodes(leafOnly) {
       return this.panel.getCheckedNodes(leafOnly)
     }

@@ -63,10 +63,6 @@ export default {
     description: '引导页对于一些第一次进入项目的人很有用，你可以简单介绍下项目的功能。本 Demo 是基于',
     button: '打开引导'
   },
-  table: {
-    id: '序号',
-    action: '操作'
-  },
   button: {
     remove: '删除',
     relevance: '关联',
@@ -153,6 +149,9 @@ export default {
   },
   langDefine: {
     name: '语言名字'
+  },
+  table: {
+    name: '表名'
   }
 
 }
