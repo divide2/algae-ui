@@ -48,7 +48,7 @@ module.exports = {
         }
       },
       [process.env.VUE_APP_SERVER_API]: {
-        target: `http://localhost:8080`,
+        target: `http://120.77.153.225:8080`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_SERVER_API]: ''

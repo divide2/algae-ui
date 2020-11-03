@@ -175,28 +175,13 @@ export const asyncRoutes = [
     name: 'lang',
     component: Layout,
     redirect: '/langs',
-    meta: { title: 'lang', icon: 'table' },
+    meta: { title: 'lang', icon: 'language' },
     children: [
       {
         path: 'langs',
         name: 'langs',
         component: () => import('@/views/lang/List'),
         meta: { title: 'lang' }
-      }
-    ]
-  },
-  {
-    path: '/validate',
-    name: 'validate',
-    component: Layout,
-    redirect: '/validates',
-    meta: { title: 'validate', icon: 'table' },
-    children: [
-      {
-        path: 'validates',
-        name: 'validates',
-        component: () => import('@/views/validate/List'),
-        meta: { title: 'validates' }
       }
     ]
   },
