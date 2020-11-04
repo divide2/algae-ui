@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeTabName" type="card" editable @edit="handleTabEdit">
+    <el-tabs v-model="activeTabName" type="card" closable addable @edit="handleTabEdit">
       <el-tab-pane label="产品" name="product" :closable="false">
         <el-steps :active="activeStep" finish-status="success">
           <el-step :title="$t('tagsView.step',[1])" />
@@ -10,11 +10,11 @@
         <el-form label-width="120px" size="mini" :model="product">
           <el-row v-show="activeStep===0">
             <el-col :span="10">
-              <el-form-item :label="$t('product.productName')+':'">
+              <el-form-item :label="$t('product.name')+':'">
                 <!--                <el-input v-model="product.name" />-->
-                <ii-cascader v-model="product.name" :options="options" clearable filterable />
+                <ii-cascader v-model="product.name" :options="langs" clearable filterable />
               </el-form-item>
-              <el-form-item :label="$t('product.productCode')+':'">
+              <el-form-item :label="$t('product.code')+':'">
                 <el-input v-model="product.code" />
               </el-form-item>
             </el-col>
@@ -22,13 +22,13 @@
           <el-row v-show="activeStep===1" />
           <el-row v-show="activeStep===2" />
         </el-form>
-        <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+        <el-button style="margin-top: 12px;" @click="next">{{ $t('button.next') }}</el-button>
       </el-tab-pane>
       <el-tab-pane v-for="(item) in tables" :key="item.name" :label="item.name" :name="item.name">
         {{ item }}
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :visible.sync="dialogVisible" width="300px">
+    <el-dialog :visible.sync="dialogVisible" width="300px" :close-on-click-modal="false">
       <el-form size="mini">
         <el-form-item :label="$t('table.name')+':'">
           <el-input v-model="tableName" />
@@ -45,7 +45,8 @@
 <script>
 // import ProductApi from '@/api/ProductApi' // secondary package based on el-pagination
 
-import IiCascader from '@/components/ii/cascader'
+import IiCascader from '@/components/ii/cascader/cascader'
+import LangApi from '@/api/LangApi'
 
 export default {
   name: 'Product',
@@ -60,49 +61,16 @@ export default {
         name: [],
         code: null
       },
-      options: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [
-          {
-            value: 'shejiyuanze',
-            label: '设计原则',
-            children: [{
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }, {
-              value: 'xiaolv',
-              label: '效率'
-            }, {
-              value: 'kekong',
-              label: '可控'
-            }]
-          },
-          {
-            value: 'daohang',
-            label: '导航',
-            children: [{
-              value: 'cexiangdaohang',
-              label: '侧向导航'
-            }, {
-              value: 'dingbudaohang',
-              label: '顶部导航'
-            }]
-          }]
-      }],
+      langs: [],
       tableName: '',
-      tables: [
-        { name: 'T_CASH_VALUE', label: 'T_CASH_VALUE' },
-        { name: 'T_GCV_VALUE', label: 'T_CASH_VALUE' }
-      ],
+      tables: [],
       dialogVisible: false
     }
   },
   computed: {},
-  created() {
+  async mounted() {
+    const { content } = await LangApi.find()
+    this.langs = content
   },
   methods: {
     next() {
