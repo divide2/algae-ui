@@ -9,7 +9,8 @@ export default {
     validate: '验证',
     validates: '验证',
     basic: '基础',
-    productAdd: '产品新增'
+    productAdd: '产品新增',
+    lang: '语言'
   },
   navbar: {
     dashboard: '首页',
@@ -23,38 +24,6 @@ export default {
     productCode: '产品编号',
     productName: '产品名称',
     tabName: '标签名称'
-  },
-  formulaGroup: {
-    formulaGroupName: '组名',
-    formulaGroupDisplayName: 'Json中显示名称',
-    formulaGroupCategory: '种类',
-    formulaGroupCalcType: '计算类型',
-    formulaGroupDesc: '描述',
-    iterationTerminalMaster: '结束迭代Master'
-  },
-  formula: {
-    formulaName: '公式名',
-    masterName: '公式Master名',
-    formula: '公式内容',
-    masterDesc: '公式描述',
-    reference: '关联公式',
-    formulaInitValue: '初始值',
-    formulaValueType: '值类型',
-    formulaVersion: '版本',
-    formulaDesc: '公式描述'
-  },
-  rateDefinition: {
-    dbColumnName: '列名',
-    dbTableName: '表名',
-    factors: '因子',
-    rateName: '费率名',
-    searchRateSqlTemplate: '模板'
-  },
-  validate: {
-    field: '字段',
-    version: '版本',
-    valid: '验证规则',
-    component: '验证位置'
   },
   dashboard: {
     productCount: '产品总数',
@@ -94,10 +63,6 @@ export default {
     description: '引导页对于一些第一次进入项目的人很有用，你可以简单介绍下项目的功能。本 Demo 是基于',
     button: '打开引导'
   },
-  table: {
-    id: '序号',
-    action: '操作'
-  },
   button: {
     remove: '删除',
     relevance: '关联',
@@ -124,16 +89,7 @@ export default {
     upgrade: '升级',
     update: '更新',
     retry: '重试',
-    formulaGroup: '公式组',
-    formula: '公式',
-    toggle: '切换显示',
-    rateDefinition: '费率定义',
-    rule: '规则',
-    addVersion: '添加版本',
-    validate: '验证',
-    relateValidate: '关联验证',
-    viewRelatedProduct: '关联产品',
-    viewRelatedFormula: '关联公式'
+    createLangDefine: '添加新语言'
   },
   status: {
     basic: {
@@ -187,47 +143,15 @@ export default {
     fixedHeader: '固定 Header',
     sidebarLogo: '侧边栏 Logo'
   },
-  indexMonitor: {
-    indexManage: {
-      indexName: '指标名称',
-      createTime: '创建时间',
-      ruleName: '统计规则名称',
-      header: '报文头',
-      matchRule: '匹配规则',
-      condition: '条件',
-      statisticalContent: '统计内容',
-      exceptionNum: '异常数',
-      countNum: '总数',
-      exceptionRate: '异常率'
-    },
-    monitorExample: {
-      appVersion: 'APP版本号',
-      versionType: 'APP版本类型',
-      monitorTime: '监控时间',
-      monitorDuration: '监控时长',
-      runStatus: '运行状态',
-      selectVersion: '选择版本',
-      selectDevice: '选择设备',
-      setMonitor: '设置日常监控',
-      versionMaster: '正式版本',
-      versionBranch: '分支版本',
-      selectCCU: '选择CCU',
-      selectIndexMonitor: '选择监控指标',
-      monitorStartTime: '监控开始时间',
-      monitorEndTime: '监控结束时间',
-      monitorAlert: '监控异常提醒',
-      monitorFreq: '提醒频率',
-      monitorEmail: '提醒邮箱',
-      monitorFreqUnit: 'h/次',
-      baseInfo: '基本信息',
-      deviceNum: '设备数量',
-      monitorResult: '日常监控结果',
-      monitorResultTime: '监控时间范围',
-      monitorResultTimeDes: '开始时间--处理完数据时间',
-      ccuImei: 'CCU IMEI',
-      responseTime: '报文时间',
-      responseContent: '报文内容'
-    }
+  lang: {
+    category: '组',
+    code: '编号'
+  },
+  langDefine: {
+    name: '语言名字'
+  },
+  table: {
+    name: '表名'
   }
 
 }

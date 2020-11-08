@@ -175,7 +175,7 @@ export const asyncRoutes = [
     name: 'lang',
     component: Layout,
     redirect: '/langs',
-    meta: { title: 'lang', icon: 'table' },
+    meta: { title: 'lang', icon: 'language' },
     children: [
       {
         path: 'langs',

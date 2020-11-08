@@ -48,7 +48,7 @@ module.exports = {
         }
       },
       [process.env.VUE_APP_SERVER_API]: {
-        target: `http://192.168.1.2:8080`,
+        target: `http://120.77.153.225:8080`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_SERVER_API]: ''
@@ -87,6 +87,16 @@ module.exports = {
       })
       .end()
 
+    config.module
+      .rule('thejs')
+      .test(/\.js$/)
+      .include
+      .add(path.resolve('src'))
+      .add(path.resolve('node_modules/element-ui/packages'))
+      .end()
+      .use('babel-loader')
+      .loader('babel-loader')
+      .end()
     // set preserveWhitespace
     config.module
       .rule('vue')
