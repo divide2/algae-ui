@@ -21,8 +21,8 @@ export default {
     size: '布局大小'
   },
   product: {
-    productCode: '产品编号',
-    productName: '产品名称',
+    code: '产品编号',
+    name: '产品名称',
     tabName: '标签名称'
   },
   dashboard: {
@@ -89,6 +89,7 @@ export default {
     upgrade: '升级',
     update: '更新',
     retry: '重试',
+    next: '下一步',
     createLangDefine: '添加新语言'
   },
   status: {

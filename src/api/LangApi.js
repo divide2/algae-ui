@@ -7,6 +7,9 @@ export default {
   find(params) {
     return axios.get('/v1/langs', { params })
   },
+  tree(param) {
+    return axios.get('/v1/langs/tree', param)
+  },
   add(param) {
     return axios.post('/v1/langs', param)
   }
