@@ -21,8 +21,8 @@ export default {
     size: '布局大小'
   },
   product: {
-    productCode: '产品编号',
-    productName: '产品名称',
+    code: '产品编号',
+    name: '产品名称',
     tabName: '标签名称'
   },
   dashboard: {
@@ -89,7 +89,9 @@ export default {
     upgrade: '升级',
     update: '更新',
     retry: '重试',
-    createLangDefine: '添加新语言'
+    createLangDefine: '添加新语言',
+    next: '下一步',
+    back: '上一步'
   },
   status: {
     basic: {
@@ -152,6 +154,16 @@ export default {
   },
   table: {
     name: '表名'
+  },
+  validation: {
+    required: '不能为空',
+    max: '不能超过{0}'
+  },
+  fields: {
+    product: {
+      name: '产品名称',
+      code: '编号'
+    }
   }
 
 }

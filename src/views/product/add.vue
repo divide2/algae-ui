@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeTabName" type="card" closable addable @edit="handleTabEdit">
+    <el-tabs v-model="activeTabName" type="card" closable :addabe="isHasProduct" @edit="handleTabEdit">
       <el-tab-pane label="产品" name="product" :closable="false">
         <el-steps :active="activeStep" finish-status="success">
           <el-step :title="$t('tagsView.step',[1])" />
@@ -67,15 +67,23 @@ export default {
       dialogVisible: false
     }
   },
-  computed: {},
+  computed: {
+    isHasProduct() {
+      return !!this.product.id
+    }
+  },
   async mounted() {
     const { content } = await LangApi.find()
     this.langs = content
   },
   methods: {
     next() {
-      if (this.activeStep++ > 2) {
-        this.activeStep = 0
+      if (this.isHasProduct) {
+        if (this.activeStep++ > 2) {
+          this.activeStep = 0
+        }
+      } else {
+        this.$confirm(this.$t('message.confirmRemove'))
       }
     },
     addTable() {
