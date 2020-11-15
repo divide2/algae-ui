@@ -12,7 +12,7 @@
             <el-col :span="10">
               <el-form-item :label="$t('product.name')+':'">
                 <!--                <el-input v-model="product.name" />-->
-                <ii-cascader v-model="product.name" :options="langs" clearable filterable />
+                <ii-cascader v-model="product.name" :options="langs" :props="prop" :show-all-levels="false" clearable filterable />
               </el-form-item>
               <el-form-item :label="$t('product.code')+':'">
                 <el-input v-model="product.code" />
@@ -64,7 +64,10 @@ export default {
       langs: [],
       tableName: '',
       tables: [],
-      dialogVisible: false
+      dialogVisible: false,
+      prop: {
+        value: 'id'
+      }
     }
   },
   computed: {
@@ -73,8 +76,7 @@ export default {
     }
   },
   async mounted() {
-    const { content } = await LangApi.find()
-    this.langs = content
+    this.langs = await LangApi.tree()
   },
   methods: {
     next() {
