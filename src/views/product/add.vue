@@ -7,22 +7,23 @@
           <el-step :title="$t('tagsView.step',[2])" />
           <el-step :title="$t('tagsView.step',[3])" />
         </el-steps>
-        <el-form label-width="120px" size="mini" :model="product">
+        <ii-form ref="productForm" label-width="120px" size="mini" :rules="rules" :model="product">
           <el-row v-show="activeStep===0">
             <el-col :span="10">
-              <el-form-item :label="$t('product.name')+':'">
+              <ii-form-item :label="$t('product.name')+':'" prop="name">
                 <!--                <el-input v-model="product.name" />-->
                 <ii-cascader v-model="product.name" :options="langs" clearable filterable />
-              </el-form-item>
-              <el-form-item :label="$t('product.code')+':'">
+              </ii-form-item>
+              <ii-form-item :label="$t('product.code')+':'" prop="code">
                 <el-input v-model="product.code" />
-              </el-form-item>
+              </ii-form-item>
             </el-col>
           </el-row>
           <el-row v-show="activeStep===1" />
           <el-row v-show="activeStep===2" />
-        </el-form>
+        </ii-form>
         <el-button style="margin-top: 12px;" @click="next">{{ $t('button.next') }}</el-button>
+        <el-button style="margin-top: 12px;" @click="reset">{{ $t('button.next') }}</el-button>
       </el-tab-pane>
       <el-tab-pane v-for="(item) in tables" :key="item.name" :label="item.name" :name="item.name">
         {{ item }}
@@ -47,10 +48,12 @@
 
 import IiCascader from '@/components/ii/cascader/cascader'
 import LangApi from '@/api/LangApi'
+import IiFormItem from '@/components/ii/formItem/form-item'
+import IiForm from '@/components/ii/formItem/form'
 
 export default {
   name: 'Product',
-  components: { IiCascader },
+  components: { IiForm, IiFormItem, IiCascader },
   directives: {},
   data() {
     return {
@@ -64,7 +67,16 @@ export default {
       langs: [],
       tableName: '',
       tables: [],
-      dialogVisible: false
+      dialogVisible: false,
+      rules: {
+        name: [
+          { required: true, trigger: 'change' }
+        ],
+        code: [
+          { required: true, trigger: 'blur' },
+          { min: 3, max: 5, trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {},
@@ -73,10 +85,18 @@ export default {
     this.langs = content
   },
   methods: {
+    reset() {
+      this.$refs['productForm'].resetFields()
+    },
     next() {
-      if (this.activeStep++ > 2) {
-        this.activeStep = 0
-      }
+      this.$refs['productForm'].validate((valid) => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     addTable() {
       this.tables.push({ name: this.tableName })

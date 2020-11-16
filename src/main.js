@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 import Cookies from 'js-cookie'
 
+import AsyncValidator from 'element-ui/node_modules/async-validator/es'
+
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import Element from 'element-ui'
 import './styles/element-variables.scss'
