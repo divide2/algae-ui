@@ -5,6 +5,6 @@ export default {
     return axios.get('/v1/products', { params })
   },
   add(data) {
-    return axios.post('/v1/product', data)
+    return axios.post('/v1/products', data)
   }
 }
