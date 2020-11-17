@@ -45,11 +45,6 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code > 0) {
-      Message.error(res.message)
-      return Promise.reject(new Error(res.message || 'Error'))
-    }
     if (response.status === 403) {
       // to re-login
       MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {

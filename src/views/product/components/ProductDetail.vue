@@ -99,7 +99,12 @@ export default {
     next() {
       this.$refs['productForm'].validate((valid) => {
         if (valid) {
-          ProductApi.add(Object.assign(this.product, { name: this.product.name.reduce((a, b) => a + '.' + b) }))
+          const product = Object.assign({}, this.product, { name: this.product.name.reduce((a, b) => a + '.' + b) })
+          ProductApi.add(product).then((data) => {
+            console.log(data)
+          }).catch((error) => {
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false
