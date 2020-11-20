@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeTabName" type="card" closable :addabe="isHasProduct" @edit="handleTabEdit">
+    <el-tabs v-model="activeTabName" type="card" :addable="isHasProduct" @edit="handleTabEdit">
       <el-tab-pane label="产品" name="product" :closable="false">
         <el-steps :active="activeStep" finish-status="success">
           <el-step :title="$t('tagsView.step',[1])" />
@@ -22,9 +22,10 @@
           <el-row v-show="activeStep===1" />
           <el-row v-show="activeStep===2" />
         </el-form>
+        <el-button style="margin-top: 12px;" @click="back">{{ $t('button.back') }}</el-button>
         <el-button style="margin-top: 12px;" @click="next">{{ $t('button.next') }}</el-button>
       </el-tab-pane>
-      <el-tab-pane v-for="(item) in tables" :key="item.name" :label="item.name" :name="item.name">
+      <el-tab-pane v-for="(item) in tables" :key="item.name" :label="item.name" :name="item.name" :closable="true">
         {{ item }}
       </el-tab-pane>
     </el-tabs>
@@ -89,6 +90,7 @@ export default {
   },
   computed: {
     isHasProduct() {
+      console.log(!!this.product.id)
       return !!this.product.id
     }
   },
@@ -101,7 +103,8 @@ export default {
         if (valid) {
           const product = Object.assign({}, this.product, { name: this.product.name.reduce((a, b) => a + '.' + b) })
           ProductApi.add(product).then((data) => {
-            console.log(data)
+            this.product = Object.assign({}, data, { name: data.name.split('.') })
+            this.activeStep++
           }).catch((error) => {
             console.log(error)
           })
@@ -111,29 +114,41 @@ export default {
         }
       })
     },
+    back() {
+      if (this.activeStep != 0) {
+        this.activeStep--
+      }
+    },
     addTable() {
-      this.tables.push({ name: this.tableName })
-      this.activeTabName = this.tableName
+      // this.tables.push({name: this.tableName})
+      ProductApi.addTable({ productId: this.product.id, name: this.tableName }).then(() => {
+        ProductApi.getTable(this.product.id).then((data) => {
+          this.tables = data.content
+          this.activeTabName = this.tableName
+        })
+      })
     },
     handleTabEdit(tableName, action) {
       if (action === 'add') {
         this.showDialog()
       } else if (action === 'remove') {
-        this.$confirm(this.$t('message.confirmRemove')).then(data => {
-          const tables = this.tables
-          let activeName = this.activeTabName
-          if (activeName === tableName) {
-            tables.forEach((table, index) => {
-              if (table.name === tableName) {
-                const nextTab = tables[index + 1] || tables[index - 1]
-                if (nextTab) {
-                  activeName = nextTab.name
+        this.$confirm(this.$t('message.confirmRemove')).then(() => {
+          const index = this.tables.findIndex((table) => {
+            return table.name === tableName
+          })
+          const table = this.tables.find((table) => table.name === tableName)
+          ProductApi.delTable(this.product.id, table.id).then(() => {
+            ProductApi.getTable(this.product.id).then((data) => {
+              this.tables = data.content
+              if (this.tables.length > 0) {
+                if (index === this.tables.length) {
+                  this.activeTabName = this.tables[this.tables.length - 1] ? this.tables[this.tables.length - 1].name : 'product'
+                } else {
+                  this.activeTabName = this.tables[index] ? this.tables[index].name : 'product'
                 }
               }
             })
-          }
-          this.tables = tables.filter(tab => tab.name !== tableName)
-          this.activeTabName = activeName
+          })
         })
       }
     },
