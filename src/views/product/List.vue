@@ -113,7 +113,7 @@ export default {
     },
     toValidate(row) {
       this.$router.push({
-        name: 'productValidate', params: { id: row.id }
+        name: 'productUpdate', params: { id: row.id }
       })
     },
     async remove(row) {

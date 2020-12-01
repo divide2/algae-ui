@@ -3,9 +3,9 @@
     <el-tabs v-model="activeTabName" type="card" :addable="isHasProduct" @edit="handleTabEdit">
       <el-tab-pane label="产品" name="product" :closable="false">
         <el-steps :active="activeStep" finish-status="success">
-          <el-step :title="$t('tagsView.step',[1])" />
-          <el-step :title="$t('tagsView.step',[2])" />
-          <el-step :title="$t('tagsView.step',[3])" />
+          <el-step :title="$t('product.baseInformation')" />
+          <el-step :title="$t('product.rule')" />
+          <el-step :title="$t('product.benefitDemonstration')" />
         </el-steps>
         <el-form ref="productForm" label-width="120px" size="mini" :model="product" :rules="rules">
           <el-row v-show="activeStep===0">
@@ -26,7 +26,19 @@
         <el-button style="margin-top: 12px;" @click="next">{{ $t('button.next') }}</el-button>
       </el-tab-pane>
       <el-tab-pane v-for="(item) in tables" :key="item.name" :label="item.name" :name="item.name" :closable="true">
-        {{ item }}
+        <el-upload
+          class="upload-demo"
+          action="/api/v1/file/upload"
+          accept=".xlsx"
+          :on-success="getTableDetail"
+          :multiple="false"
+          :limit="1"
+          :on-exceed="handleExceed"
+          :file-list="fileList"
+        >
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传1个xlsx文件，且不超过100M</div>
+        </el-upload>
       </el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="dialogVisible" width="300px" :close-on-click-modal="false">
@@ -60,7 +72,7 @@ export default {
   },
   data() {
     return {
-      activeStep: 0,
+      activeStep: 1,
       activeTabName: 'product', // 当前tab的名字
       product: {
         id: null,
@@ -85,7 +97,8 @@ export default {
           message: this.$t('fields.product.code') + this.$t('validation.required'),
           trigger: 'blur'
         }]
-      }
+      },
+      fileList: [] // 导入的文件
     }
   },
   computed: {
@@ -97,17 +110,37 @@ export default {
   async mounted() {
     this.langs = await LangApi.tree()
   },
+  created() {
+    if (this.isEdit) {
+      ProductApi.get(this.$route.params.id).then((data) => {
+        this.product = Object.assign({}, data, { name: data.name.split('.') })
+        ProductApi.getTable(this.product.id).then((data) => {
+          this.tables = data.content
+        })
+      })
+    }
+  },
   methods: {
     next() {
       this.$refs['productForm'].validate((valid) => {
         if (valid) {
-          const product = Object.assign({}, this.product, { name: this.product.name.reduce((a, b) => a + '.' + b) })
-          ProductApi.add(product).then((data) => {
-            this.product = Object.assign({}, data, { name: data.name.split('.') })
-            this.activeStep++
-          }).catch((error) => {
-            console.log(error)
-          })
+          if (this.isEdit) {
+            const product = Object.assign({}, this.product, { name: this.product.name.reduce((a, b) => a + '.' + b) })
+            ProductApi.update(product).then((data) => {
+              this.product = Object.assign({}, data, { name: data.name.split('.') })
+              this.activeStep++
+            }).catch((error) => {
+              console.log(error)
+            })
+          } else {
+            const product = Object.assign({}, this.product, { name: this.product.name.reduce((a, b) => a + '.' + b) })
+            ProductApi.add(product).then((data) => {
+              this.product = Object.assign({}, data, { name: data.name.split('.') })
+              this.activeStep++
+            }).catch((error) => {
+              console.log(error)
+            })
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -115,7 +148,7 @@ export default {
       })
     },
     back() {
-      if (this.activeStep != 0) {
+      if (this.activeStep !== 0) {
         this.activeStep--
       }
     },
@@ -140,6 +173,7 @@ export default {
           ProductApi.delTable(this.product.id, table.id).then(() => {
             ProductApi.getTable(this.product.id).then((data) => {
               this.tables = data.content
+              // 刪除完后默認打開的tab
               if (this.tables.length > 0) {
                 if (index === this.tables.length) {
                   this.activeTabName = this.tables[this.tables.length - 1] ? this.tables[this.tables.length - 1].name : 'product'
@@ -161,6 +195,14 @@ export default {
     },
     closeDialog() {
       this.dialogVisible = false
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    getTableDetail(response) {
+      ProductApi.getTableDetail(this.product.id, this.tables.find((table) => table.name === this.activeTabName).id, response.id).then((data) => {
+        console.log(data)
+      })
     }
   }
 }

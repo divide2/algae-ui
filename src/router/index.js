@@ -141,6 +141,13 @@ export const asyncRoutes = [
         meta: { title: 'productAdd' }
       },
       {
+        path: '/product/:id/update',
+        name: 'productUpdate',
+        hidden: true,
+        component: () => import('@/views/product/Update'),
+        meta: { title: 'productUpdate' }
+      },
+      {
         path: '/product/:id/formula/group',
         name: 'formulaGroup',
         hidden: true,

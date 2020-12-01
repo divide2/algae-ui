@@ -23,7 +23,10 @@ export default {
   product: {
     code: '产品编号',
     name: '产品名称',
-    tabName: '标签名称'
+    tabName: '标签名称',
+    baseInformation: '基础信息',
+    rule: '规则',
+    benefitDemonstration: '利益演示'
   },
   dashboard: {
     productCount: '产品总数',
@@ -137,6 +140,7 @@ export default {
     closeOthers: '关闭其它',
     closeAll: '关闭所有',
     step: '步骤{0}'
+
   },
   settings: {
     title: '系统布局配置',
