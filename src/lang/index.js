@@ -9,15 +9,16 @@ import enLocale from './en'
 import zhLocale from './zh'
 import esLocale from './es'
 import jaLocale from './ja'
+// import de from 'element-ui/src/locale/lang/de'
 
 Vue.use(VueI18n)
 
 const messages = {
-  en: {
+  'en-US': {
     ...enLocale,
     ...elementEnLocale
   },
-  zh: {
+  'zh-CN': {
     ...zhLocale,
     ...elementZhLocale
   },
@@ -35,14 +36,14 @@ export function getLanguage() {
   if (chooseLanguage) return chooseLanguage
 
   // if has not choose language
-  const language = (navigator.language || navigator.browserLanguage).toLowerCase()
+  const language = navigator.language || navigator.browserLanguage
   const locales = Object.keys(messages)
   for (const locale of locales) {
     if (language.indexOf(locale) > -1) {
       return locale
     }
   }
-  return 'en'
+  return 'zh-CN'
 }
 const i18n = new VueI18n({
   // set locale

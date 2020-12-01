@@ -49,8 +49,9 @@ const actions = {
   toggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device)
   },
-  setLanguage({ commit }, language) {
-    commit('SET_LANGUAGE', language)
+  async setLanguage({ commit, dispatch, rootState }, language) {
+    await commit('SET_LANGUAGE', language)
+    dispatch('product/getLangsTree', {}, { root: true })
   },
   setSize({ commit }, size) {
     commit('SET_SIZE', size)

@@ -19,7 +19,11 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-show="activeStep===1" />
+          <el-row v-show="activeStep===1">
+            <el-row>
+              <el-input :placeholder="$t('product.rule')" />
+            </el-row>
+          </el-row>
           <el-row v-show="activeStep===2" />
         </el-form>
         <el-button style="margin-top: 12px;" @click="back">{{ $t('button.back') }}</el-button>
@@ -57,7 +61,6 @@
 
 <script>
 import IiCascader from '@/components/ii/cascader/cascader'
-import LangApi from '@/api/LangApi'
 import ProductApi from '@/api/ProductApi'
 
 export default {
@@ -79,7 +82,6 @@ export default {
         name: [],
         code: null
       },
-      langs: [],
       tableName: '',
       tables: [],
       dialogVisible: false,
@@ -105,10 +107,13 @@ export default {
     isHasProduct() {
       console.log(!!this.product.id)
       return !!this.product.id
+    },
+    langs() {
+      return this.$store.getters.langsTree
     }
   },
   async mounted() {
-    this.langs = await LangApi.tree()
+    await this.$store.dispatch('product/getLangsTree')
   },
   created() {
     if (this.isEdit) {
