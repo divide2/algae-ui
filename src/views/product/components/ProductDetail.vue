@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeTabName" type="card" :addable="isHasProduct" @edit="handleTabEdit">
+    <el-tabs
+      v-model="activeTabName"
+      type="card"
+      :addable="isHasProduct"
+      @edit="handleTabEdit"
+      @tab-click="getTableData"
+    >
       <el-tab-pane label="产品" name="product" :closable="false">
         <el-steps :active="activeStep" finish-status="success">
           <el-step :title="$t('product.baseInformation')" />
@@ -20,8 +26,25 @@
             </el-col>
           </el-row>
           <el-row v-show="activeStep===1">
-            <el-row>
-              <el-input :placeholder="$t('product.rule')" />
+            <el-button size="mini" @click="dialogVisible = false">{{ $t('button.add') }}</el-button>
+
+            <el-row type="flex">
+              <el-col>
+                <ii-cascader v-model="product.name" :options="langs" :props="prop" clearable filterable />
+              </el-col>
+              <el-col>
+                <el-row>
+                  <!--                  <el-select v-model="value" placeholder="请选择">-->
+                  <!--                    <el-option-->
+                  <!--                      v-for="item in ruleOptions"-->
+                  <!--                      :key="item.value"-->
+                  <!--                      :label="item.label"-->
+                  <!--                      :value="item.value">-->
+                  <!--                    </el-option>-->
+                  <!--                  </el-select>-->
+                  <el-input />
+                </el-row>
+              </el-col>
             </el-row>
           </el-row>
           <el-row v-show="activeStep===2" />
@@ -43,6 +66,19 @@
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传1个xlsx文件，且不超过100M</div>
         </el-upload>
+
+        <el-table
+          :data="tableData.data"
+          style="width: 100%"
+        >
+          <el-table-column
+            v-for="(item,index) in tableData.headers"
+            :key="index"
+            :prop="item"
+            :label="item"
+            width="180"
+          />
+        </el-table>
       </el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="dialogVisible" width="300px" :close-on-click-modal="false">
@@ -54,6 +90,21 @@
       <div slot="footer">
         <el-button size="mini" @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
         <el-button type="primary" size="mini" @click="confirmAddTab">{{ $t('button.confirm') }}</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="选择" :visible.sync="dialogFormVisible">
+      <el-form>
+        <el-form-item label="表格选择">
+          <el-radio-group v-model="sheet">
+            <el-radio v-for="(item,index) in sheets" :key="index" :label="item" />
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addSheet">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -100,12 +151,35 @@ export default {
           trigger: 'blur'
         }]
       },
-      fileList: [] // 导入的文件
+      fileList: [], // 导入的文件
+      ruleOptions: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
+      dialogFormVisible: false,
+      sheets: [],
+      sheet: '',
+      fileId: '',
+      tableData: {
+        headers: [],
+        data: []
+      }
     }
   },
   computed: {
     isHasProduct() {
-      console.log(!!this.product.id)
       return !!this.product.id
     },
     langs() {
@@ -147,7 +221,6 @@ export default {
             })
           }
         } else {
-          console.log('error submit!!')
           return false
         }
       })
@@ -170,6 +243,8 @@ export default {
       if (action === 'add') {
         this.showDialog()
       } else if (action === 'remove') {
+        console.log(action, '33333333333')
+
         this.$confirm(this.$t('message.confirmRemove')).then(() => {
           const index = this.tables.findIndex((table) => {
             return table.name === tableName
@@ -205,9 +280,28 @@ export default {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     getTableDetail(response) {
+      this.fileId = response.id
       ProductApi.getTableDetail(this.product.id, this.tables.find((table) => table.name === this.activeTabName).id, response.id).then((data) => {
-        console.log(data)
+        this.sheets = data.sheets
+        this.dialogFormVisible = true
       })
+    },
+    addSheet() {
+      ProductApi.postTableFileSheet(this.product.id, this.tables.find((table) => table.name === this.activeTabName).id, this.fileId, this.sheet).then((data) => {
+        this.getTableData()
+        this.dialogFormVisible = false
+      })
+    },
+    getTableData(tab) { // 拿到单张表格的数据
+      if (tab.index !== '0') {
+        ProductApi.getTablesHeader(this.product.id, this.tables.find((table) => table.name === this.activeTabName).id).then((data) => {
+          var headers = data.map(item => item.name)
+          this.tableData.headers = headers
+          ProductApi.getTableData(this.product.id, this.tables.find((table) => table.name === this.activeTabName).id).then((data) => {
+            this.tableData.data = data.content
+          })
+        })
+      }
     }
   }
 }

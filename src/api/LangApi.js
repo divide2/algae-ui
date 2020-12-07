@@ -12,5 +12,8 @@ export default {
   },
   add(param) {
     return axios.post('/v1/langs', param)
+  },
+  getLang() {
+    return axios.get('/v1/langs/dict')
   }
 }

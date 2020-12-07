@@ -18,6 +18,7 @@ const actions = {
     LangApi.tree().then(lang => {
       commit('GET_LANGS_TREE', lang)
     })
+    LangApi.getLang()
   },
   clearErrorLog({ commit }) {
     commit('CLEAR_ERROR_LOG')
