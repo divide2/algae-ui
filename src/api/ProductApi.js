@@ -28,11 +28,10 @@ export default {
   postTableFileSheet(productId, tableId, fileId, sheet) {
     return axios.post(`/v1/products/${productId}/tables/${tableId}/files/${fileId}/sheets/${sheet}`)
   },
-  getTableData(productId, tableId) { // 表格内容
-    return axios.get(`/v1/products/${productId}/tables/${tableId}/columns`)
+  getTableData(productId, tableId, params) { // 表格内容
+    return axios.get(`/v1/products/${productId}/tables/${tableId}/columns`, { params })
   },
   getTablesHeader(productId, tableId) { // 表格头部信息
     return axios.get(`/v1/products/${productId}/tables/${tableId}/columns/defines`)
   }
-
 }
